@@ -72,11 +72,19 @@ namespace Proyecto1
             string[] L = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "\xD1", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "\xF1", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
             string[] N = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" };
             string[] R = { "=" };
-            string[] O = { "+", "-", "*", "/", "^" };
+            string[] PN = { "." };
             string[] P = { ";"};
             string[] D = { "("};
             string[] I = { ")"};
             string[] C = { ","};
+            string[] G = { "_" };
+            string[] X = { " ", "+", "-", "*", "/", "^" };
+            string[] SL = { "\n" };
+            string[] CM = { "/" };
+            string[] A = { "*" };
+            string[] B = { "\"" };
+
+
 
             //string N = "ABCDEFGHI";
 
@@ -98,8 +106,12 @@ namespace Proyecto1
 
                         fila = filaActual;
                         columna = colActual;
-
-                        if (comparar(N, caracterActualStr))
+                        if (comparar(CM, caracterActualStr))
+                        {
+                            lexema += caracterActual;
+                            estadoActual = 8;
+                        }
+                        else if (comparar(N, caracterActualStr))
                         {
                             lexema += caracterActual;
                             estadoActual = 1;
@@ -134,11 +146,12 @@ namespace Proyecto1
                             lexema += caracterActual;
                             estadoActual = 7;
                         }
-                        else if (comparar(O, caracterActualStr))
+                        else if (comparar(B, caracterActualStr))
                         {
                             lexema += caracterActual;
-                            estadoActual = 8;
+                            estadoActual = 14;
                         }
+
                         else
                         {
                             switch (caracterActual)
@@ -178,6 +191,11 @@ namespace Proyecto1
                             estadoActual = 9;
                             lexema += caracterActual;
                         }
+                        else if (comparar(PN, caracterActualStr))
+                        {
+                            estadoActual = 16;
+                            lexema += caracterActual;
+                        }
                         else if(!comparar(N, caracterActualStr))
                         {
                             // metodo enviar lexema
@@ -200,6 +218,11 @@ namespace Proyecto1
                             lexema += caracterActual;
                         }
                         else if (comparar(L, caracterActualStr))
+                        {
+                            lexema += caracterActual;
+                            estadoActual = 2;
+                        }
+                        else if (comparar(G, caracterActualStr))
                         {
                             lexema += caracterActual;
                             estadoActual = 2;
@@ -252,11 +275,41 @@ namespace Proyecto1
                         colActual--;
                         break;
                     case 8:     //  ESTADO 8
-                        escribirEnConsola( validarLexema(lexema, fila, columna, "reservado"));
-                        estadoActual = 0;
-                        lexema = "";
-                        estadoInicial--;
-                        colActual--;
+                        if (comparar(CM, caracterActualStr))
+                        {
+                            lexema += caracterActual;
+                            estadoActual = 10;
+                        }
+                        else if (comparar(A, caracterActualStr))
+                        {
+                            lexema += caracterActual;
+                            estadoActual = 12;
+                        }
+                        else
+                        {
+                            switch (caracterActual)
+                            {
+                                case ' ':
+                                case '\t':
+                                case '\b':
+                                case '\f':
+                                case '\r':
+                                    estadoActual = -1;
+                                    break;
+                                case '\n':
+                                    filaActual++;
+                                    colActual = 0;
+                                    estadoActual = -1;
+                                    break;
+                                default:
+
+                                    lexema += caracterActual;
+                                    estadoActual = -1;
+                                    colActual--;
+                                    break;
+                            }
+
+                        }
                         break;
                     case 9:     //  ESTADO ERROR
 
@@ -280,6 +333,124 @@ namespace Proyecto1
                         
                         break;
 
+                    case 10:     //  ESTADO 10
+                        if (comparar(SL, caracterActualStr))
+                        {
+                            lexema += caracterActual;
+                            estadoActual = 11;
+                        }
+                        else
+                        {
+                            lexema += caracterActual;
+                            estadoActual = 10;
+                        }
+                        break;
+
+                    case 11:     //  ESTADO 11
+                        escribirEnConsola(validarLexema(lexema, fila, columna, "comentario"));
+                        estadoActual = 0;
+                        lexema = "";
+                        estadoInicial--;
+                        colActual--;
+                        break;
+                    case 12:     //  ESTADO 12
+                        if (comparar(A, caracterActualStr))
+                        {
+                            if(comparar(CM, cadena[estadoInicial + 1].ToString()))
+                            {
+                                lexema += caracterActual;
+                                lexema += cadena[estadoInicial + 1].ToString();
+                                estadoActual = 13;
+                            }
+                            else
+                            {
+                                lexema += caracterActual;
+                                estadoActual = 12;
+                            }
+                        }
+                        else
+                        {
+                            lexema += caracterActual;
+                            estadoActual = 12;
+                        }
+                        break;
+
+                    case 13:     //  ESTADO 13
+                        escribirEnConsola(validarLexema(lexema, fila, columna, "comentario"));
+                        estadoActual = 0;
+                        lexema = "";
+                        estadoInicial--;
+                        colActual--;
+                        break;
+                    case 14:     //  ESTADO 14
+                        if (comparar(B, caracterActualStr))
+                        {
+                            lexema += caracterActual;
+                            estadoActual = 15;
+                        }
+                        else
+                        {
+                            lexema += caracterActual;
+                            estadoActual = 14;
+                        }
+                        break;
+
+                    case 15:     //  ESTADO 11
+                        escribirEnConsola(validarLexema(lexema, fila, columna, "comentario"));
+                        estadoActual = 0;
+                        lexema = "";
+                        estadoInicial--;
+                        colActual--;
+                        break;
+                    case 16:     //  ESTADO 16
+                        if (comparar(N, caracterActualStr))
+                        {
+                            lexema += caracterActual;
+                            estadoActual = 17;
+                        }
+                        else
+                        {
+                            switch (caracterActual)
+                            {
+                                case ' ':
+                                case '\t':
+                                case '\b':
+                                case '\f':
+                                case '\r':
+                                    estadoActual = -1;
+                                    break;
+                                case '\n':
+                                    filaActual++;
+                                    colActual = 0;
+                                    estadoActual = -1;
+                                    break;
+                                default:
+
+                                    lexema += caracterActual;
+                                    estadoActual = -1;
+                                    colActual--;
+                                    break;
+                            }
+                        }
+                        
+                        break;
+                    case 17:     //  ESTADO 17
+                        if (comparar(N, caracterActualStr))
+                        {
+                            lexema += caracterActual;
+                            estadoActual = 17;
+                        }
+                        else
+                        {
+                            escribirEnConsola(validarLexema(lexema, fila, columna, "numero"));
+                            estadoActual = 0;
+                            lexema = "";
+                            estadoInicial--;
+                            colActual--;
+                        }
+                        
+                            break;
+                    
                     default:
                         agregarError(lexema, fila, columna);
                         escribirEnConsola("- ERROR: No se reconoce el lexema \"" + lexema+"\" en (Fila: " + fila + ", Col: " + columna + ")");
@@ -390,19 +561,21 @@ namespace Proyecto1
         private string validarLexema(string lexema, int fila, int columna, string tipo)
         {
             
-            lexema = lexema.Replace(" ", "");
+            
 
             // tokens y palabras reservadas
 
            
             if (tipo == "numero")   //  Si viene un numero:
             {
+                lexema = lexema.Replace(" ", "");
                 agregarLexema(token[1, 0], lexema, fila, columna, token[1, 2]);
                 return "+ TOKEN: " + lexema + "\t(Fila: " + fila + ", Col: " + columna + ")" + "\tId Token: " + token[1,0] + "\tToken: " + token[1,2];
                 
             }
             else if(tipo == "reservado")   //   Si vienen ID o simbolos:
             {
+                lexema = lexema.Replace(" ", "");
                 for (int i = 0; i < palabrasReservadas.GetLength(0); i++)
                 {
                     if (lexema == palabrasReservadas[i,1])
@@ -417,7 +590,13 @@ namespace Proyecto1
                 return "+ TOKEN: " + lexema + "\t(Fila: " + fila + ", Col: " + columna + ")" + "\tId Token: " + token[2, 0] + "\tToken: " + token[2, 2] ;
 
             }
-            
+            else if (tipo == "comentario")   //  Si viene un numero:
+            {
+                agregarLexema(token[2, 0], lexema, fila, columna, token[2, 2]);
+                return "+ TOKEN: " + lexema + "\t(Fila: " + fila + ", Col: " + columna + ")" + "\tId Token: " + token[2, 0] + "\tToken: " + token[2, 2];
+
+            }
+
             return "ERROR INESPERADO...";
         }
 
