@@ -63,7 +63,6 @@ namespace Proyecto1
 
         private void analizarLenguaje(string cadena)
         {
-            Console.WriteLine("PRESIONASTE EL BOTON");
             int estadoInicial = 0;
             int estadoActual = 0;
             char caracterActual;
