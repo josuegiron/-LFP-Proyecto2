@@ -1,0 +1,57 @@
+T = { id, N, numero, '=', ',', tV, 'nombre', 'tipo', 'valor', cadena, 'Inicio Math', 'Fin Math','Inicio Declaracion Constantes y Variables', 'Inicio Declaracion Funciones', 'Fin Declaracion Constantes y Variables'
+	'Inicio Declaracion Funciones', 'Fin Declaracion Funciones', 'Inicio Generacion graficas', 'Fin Generacion graficas', 'Inicio constante', 'Fin contante', 'Inicio variable', 'Fin variable', 'Suma', '(', ')', 
+	'Resta', 'Multiplicacion', 'Division', 'Potencia', 'Raiz', 'Seno', 'Coseno', 'Tangente', 'Inicio Funcion', 'Fin Funcion', 'Inicio grafica', 'Fin grafica', 'x_positivo', 'x_negativo', 'y_positivo', 'y_negativo',
+	'ancho', 'largo', 'ruta', 'funcion', '//', '\t', '/*', '*/'
+}
+
+N = { <GRAFICADOR>, <COMENTARIO>, <VARIABLES_Y_CONSONANTES>, <FUNCIONES>, <GRAFICAS>, <COMENTARIO_LINEAL>, <COMENTARIO_MULTILINEA>, <EPSILON>, <FUNCION>, <OTRA_FUNCION>, <GRAFICA>, <OTRA_GRAFICA>, <CUERPO_VARIABLE_Y_CONSTANTE>,
+	<CONSTANTE>, <VARIABLE>, <NOMBRE>, <TIPO>, <VALOR>, <OPERACION>, <SUMA>, <RESTA>, <MULTIPLICACION>, <DIVISION>, <POTENCIA>, <RAIZ>, <SENO>, <COSENO>, <TANGENTE>, <OPERACION_BINARIA>, <OPERACION_UNARIA>,
+	<NOMBRE>, <X_POSITIVO>, <X_NEGATIVO>, <Y_POSITIVO>, <Y_NEGATIVO>, <ANCHO>, <LARGO>, <RUTA>, <NOMBRE_FUNCION>, <CADENA>
+}
+
+S = <GRAFICADOR>, 
+
+P = {
+	<GRAFICADOR> ::= 'Inicio Math' <COMENTARIO> <VARIABLES_Y_CONSONANTES> <COMENTARIO> <FUNCIONES> <GRAFICAS>  <COMENTARIO> 'Fin Math'<COMENTARIO>
+	<COMENTARIO> ::= <COMENTARIO_LINEAL> | <COMENTARIO_MULTILINEA> | <EPSILON>
+
+	<VARIABLES_Y_CONSONANTES> ::=  'Inicio Declaracion Constantes y Variables' <VARIABLES_Y_CONSTANTES> 'Fin Declaracion Constantes y Variables'
+	<FUNCIONES> ::= 'Inicio Declaracion Funciones' <FUNCION> <OTRA_FUNCION> 'Fin Declaracion Funciones'
+	<GRAFICAS> ::= 'Inicio Generacion graficas' <GRAFICA> <OTRA_GRAFICA> 'Fin Generacion graficas'
+	// FUNCIONES DE <VARIABLES_Y__CONSTANTES>
+	<CUERPO_VARIABLE_Y_CONSTANTE> ::= (<CONSTANTE> | <VARIABLE>) <CUERPO_VARIABLE_Y_CONSTANTE> | <EPSILON>
+	<CONSTANTE> ::= 'Inicio constante' <NOMBRE> ',' <COMENTARIO> <TIPO> ',' <COMENTARIO> <VALOR> 'Fin contante'
+	<VARIABLE> ::= 'Inicio variable' <NOMBRE> ',' <TIPO> ',' <VALOR> 'Fin variable'
+	<NOMBRE> ::= 'nombre' = id
+	<TIPO> ::= 'tipo' = tV 
+	<VALOR> ::= 'valor' = numero | <OPERACION> | id
+	<OPERACION> := <SUMA> | <RESTA> | <MULTIPLICACION> | <DIVISION> | <POTENCIA> | <RAIZ> | <SENO> | <COSENO> | <TANGENTE>
+	<SUMA> ::= 'Suma' '('<OPERACION_BINARIA>')'
+	<RESTA> ::= 'Resta' '('<OPERACION_BINARIA>')'
+	<MULTIPLICACION> ::= 'Multiplicacion' '('<OPERACION_BINARIA>')'
+	<DIVISION> ::= 'Division' '('<OPERACION_BINARIA>')'
+	<POTENCIA> ::= 'Potencia' '('<OPERACION_BINARIA>')'
+	<RAIZ> ::= 'Raiz' '(' <OPERACION_UNARIA> ')'
+	<SENO> ::= 'Seno' '(' <OPERACION_UNARIA> ')'
+	<COSENO> ::= 'Coseno' '(' <OPERACION_UNARIA> ')'
+	<TANGENTE> ::= 'Tangente' '('<OPERACION_UNARIA>')'
+	<OPERACION_BINARIA> ::= (<OPERACION> | numero | id) ',' (<OPERACION> | numero | id)
+	<OPERACION_UNARIA> ::= <OPERACION> | numero | id
+	// FUNCIONES DE <FUNCIONES>
+	<FUNCION> ::= 'Inicio Funcion' <COMENTARIO> <NOMBRE> ',' <COMENTARIO> <VALOR> <COMENTARIO> 'Fin Funcion' <COMENTARIO>
+	<OTRA_FUNCION> ::= <FUNCION> <OTRA_FUNCION> | <EPSILON>
+	// FUNCIONES DE <GRAFICAS>
+	<GRAFICA> ::= 'Inicio grafica' <COMENTARIO> <NOMBRE> ',' <X_POSITIVO> ',' <COMENTARIO> <X_NEGATIVO> ',' <COMENTARIO> <Y_POSITIVO> ',' <COMENTARIO> <Y_NEGATIVO> ',' <COMENTARIO> <ANCHO> ',' <COMENTARIO> <LARGO> ',' <COMENTARIO> <RUTA> ',' <COMENTARIO> <NOMBRE_FUNCION> <COMENTARIO> 'Fin grafica' <COMENTARIO>
+	<X_POSITIVO> ::= 'x_positivo' = numero | <OPERACION> | id
+	<X_NEGATIVO> ::= 'x_negativo' = numero | <OPERACION> | id
+	<Y_POSITIVO> ::= 'y_positivo' = numero | <OPERACION> | id
+	<Y_NEGATIVO> ::= 'y_negativo' = numero | <OPERACION> | id
+	<ANCHO> ::= 'ancho' = numero | <OPERACION> | id
+	<LARGO> ::= 'largo' = numero | <OPERACION> | id
+	<RUTA> ::= 'ruta' = <CADENA>
+	<NOMBRE_FUNCION> ::= 'funcion' = id
+	<CADENA> ::= '"' cadena '"'
+	// Comentarios
+	<COMENTARIO_LINEAL> ::= '//' cadena '\t'
+	<COMENTARIO_MULTILINEA> ::= '/*' cadena '*/'
+}
