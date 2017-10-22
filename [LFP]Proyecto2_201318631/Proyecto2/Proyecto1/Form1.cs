@@ -63,6 +63,12 @@ namespace Proyecto1
 
         private void analizarLenguaje(string cadena)
         {
+            analizarLexico(cadena);
+            analizarSintaxis(cadena);
+        }
+
+        private void analizarLexico(string cadena)
+        {
             int estadoInicial = 0;
             int estadoActual = 0;
             char caracterActual;
@@ -82,10 +88,6 @@ namespace Proyecto1
             string[] CM = { "/" };
             string[] A = { "*" };
             string[] B = { "\"" };
-
-
-
-            //string N = "ABCDEFGHI";
 
             int colActual = 0, filaActual = 1, fila = 0, columna = 0;
 
@@ -351,6 +353,7 @@ namespace Proyecto1
                         lexema = "";
                         estadoInicial--;
                         colActual--;
+                        filaActual++;
                         break;
                     case 12:     //  ESTADO 12
                         if (comparar(A, caracterActualStr))
@@ -360,12 +363,19 @@ namespace Proyecto1
                                 lexema += caracterActual;
                                 lexema += cadena[estadoInicial + 1].ToString();
                                 estadoActual = 13;
+                                estadoInicial++;
                             }
-                            else
+                            else 
                             {
                                 lexema += caracterActual;
                                 estadoActual = 12;
                             }
+                        }
+                        else if (comparar(SL, caracterActualStr))
+                        {
+                            lexema += caracterActual;
+                            estadoActual = 12;
+                            filaActual++;
                         }
                         else
                         {
@@ -468,42 +478,102 @@ namespace Proyecto1
                 { "ID", "Token", "Descripcion" },
                 { "1", "Numero", "Secuencia de numeros" },
                 { "2", "id", "Cadena de numeros y letras" },
-                { "3", "Escribir", "Palabra reservada, unción imprime en pantalla" },
-                { "4", "asg", "Palabra reservada, asignación de variables" },
-                { "5", "tamañolienzo", "Palabra reservada, puede modificar las dimensiones del lienzo, abreviatura 'tl'" },
-                { "6", "colorlienzo", "Palabra reservada" },
-                { "7", "avanzar", "Palabra reservada" },
-                { "8", "retroceder", "Palabra reservada" },
-                { "9", "girarIzq", "Palabra reservada" },
-                { "10", "girarDer", "Palabra reservada" },
-                { "11", "centrar", "Palabra reservada" },
-                { "12", "ir", "Palabra reservada" },
-                { "13", "irX", "Palabra reservada" },
-                { "14", "irY", "Palabra reservada" },
-                { "15", "subirPincel", "Palabra reservada" },
-                { "16", "bajarPincel", "Palabra reservada" },
-                { "17", "colorPincel", "Palabra reservada" },
-                { "18", "Operador", "Operador"},
+                { "3", "cadena", "Secuencia de caracteres" },
+                { "4", "tipo", "Palabra reservada" },
+                { "5", "cadenas", "Palabra reservada" },
+                { "6", "enteros", "Palabra reservada" },
+                { "7", "decimales", "Palabra reservada" },
+                { "8", "valor", "Palabra reservada" },
+                { "9", "Inicio", "Palabra reservada" },
+                { "10", "Math", "Palabra reservada" },
+                { "11", "Fin", "Palabra reservada" },
+                { "12", "Declaracion", "Palabra reservada" },
+                { "13", "Constantes", "Palabra reservada" },
+                { "14", "y", "Palabra reservada" },
+                { "15", "Variables", "Palabra reservada" },
+                { "16", "Funciones", "Palabra reservada" },
+                { "17", "Generacion", "Palabra reservada" },
+                { "18", "constante", "Palabra reservada"},
                 { "19", ";", "Final de comando"},
                 { "20", "(", "Parentesis abierto"},
                 { "21", ")", "Parentesis cerrado"},
                 { "22", ",", "Coma"},
-                { "23", "=", "Signo igual, asignacion"}
+                { "23", "=", "Signo igual, asignacion"},
+                { "24", "cadena", ""},
+                { "25", "graficas", "Palabra reservada"},
+                { "26", "Suma", "Palabra reservada, funcion de operacion"},
+                { "27", "Resta", "Palabra reservada, funcion de operacion"},
+                { "28", "Multiplicacion", "Palabra reservada, funcion de operacion"},
+                { "29", "Division", "Palabra reservada, funcion de operacion"},
+                { "30", "Potencia", "Palabra reservada, funcion de operacion"},
+                { "31", "RaizCuadrada", "Palabra reservada, funcion de operacion"},
+                { "32", "Seno", "Palabra reservada, funcion de operacion"},
+                { "33", "Coseno", "Palabra reservada, funcion de operacion"},
+                { "34", "Tangente", "Palabra reservada, funcion de operacion"},
+                { "35", "Funcion", "Palabra reservada"},
+                { "36", "grafica", "Palabra reservada"},
+                { "37", "x_positivo", "Palabra reservada"},
+                { "38", "x_negativo", "Palabra reservada"},
+                { "39", "y_positivo", "Palabra reservada"},
+                { "40", "y_negativo", "Palabra reservada"},
+                { "41", "ancho", "Palabra reservada"},
+                { "42", "largo", "Palabra reservada"},
+                { "43", "ruta", "Palabra reservada"},
+                { "44", "funcion", "Palabra reservada"},
+                { "45", "//", "Palabra reservada"},
+                { "46", "\n", "Palabra reservada"},
+                { "47", "grafica", "Palabra reservada"},
+                { "48", "nombre", "Palabra reservada"},
+                { "49", "variable", "Palabra reservada"}
             };
 
         string[,] palabrasReservadas = new string[,] {
-                { "3", "Escribir" }, { "3", "escribir" }, { "3", "ESCRIBIR" },
-                { "4", "asg" }, { "5", "tl" }, { "5", "tamañolienzo" }, { "6", "colorlienzo" },
-                { "6", "cl" }, { "7", "avanzar" }, { "7", "avz" },
-                { "8", "retroceder" }, { "8", "ret" }, { "9", "girarIzq" },
-                { "9", "izq" }, { "10", "girarDer" }, { "10", "der" },
-                { "11", "centrar" }, { "12", "ir" }, { "13", "irX" },
-                { "13", "ix" }, { "14", "irY" }, { "14", "iy" },
-                { "15", "subirPincel" }, { "15", "spl" }, { "17", "colorPincel" },
-                { "16", "bajarPincel" }, { "16", "bpl" }, { "17", "cpl" },
-                { "18", "*"}, { "18", "/"},{ "18", "+"},
-                { "18", "-"}, { "18", "^"},{ "19", ";"},
-                { "20", "("}, { "21", ")"},{ "22", ","},{ "23", "="}
+                { "4", "tipo" }, 
+                { "5", "cadena" }, { "5", "Cadena" }, 
+                { "6", "entero" },  { "6", "Entero" },
+                { "7", "decimal" }, { "7", "Decimal" },
+                { "8", "valor" }, { "8", "Valor" }, 
+                { "9", "Inicio" }, { "9", "inicio" }, 
+                { "10", "Math" }, { "10", "math" },
+                { "11", "Fin" }, { "11", "fin" },
+                { "12", "Declaracion" }, { "12", "declaracion" },
+                { "13", "Constantes" }, { "13", "constantes" }, 
+                { "14", "y" }, { "14", "Y" },
+                { "15", "Variables" }, { "15", "variables" },
+                { "16", "Funciones" }, { "17", "funciones" },
+                { "17", "Generacion" }, { "16", "generacion" },
+                { "18", "constante"}, { "18", "Constante"},
+                { "19", ";"},
+                { "20", "("}, 
+                { "21", ")"},
+                { "22", ","},
+                { "23", "="},
+                { "24", ""}, { "24", ""},
+                { "25", "graficas"}, { "25", "Graficas"},
+                { "26", "Suma"}, { "26", "suma"},
+                { "27", "Resta"}, { "27", "resta"},
+                { "28", "Multiplicar"}, { "28", "multiplicar"},
+                { "29", "Dividir"}, { "29", "dividir"},
+                { "30", "Potencia"}, { "30", "potencia"},
+                { "31", "RaizCuadrada"}, { "31", "raizcuadrada"},
+                { "32", "Seno"}, { "32", "seno"},
+                { "33", "Coseno"}, { "33", "coseno"},
+                { "34", "Tangente"}, { "34", "tangente"},
+                { "35", "Funcion"}, { "35", "funcion"},
+                { "36", "grafica"}, { "36", "Grafica"},
+                { "37", "x_positivo"}, { "37", "X_POSITIVO"},
+                { "38", "x_negativo"}, { "38", "X_NEGATIVO"},
+                { "39", "y_positivo"}, { "39", "Y_POSITIVO"},
+                { "40", "y_negativo"}, { "40", "Y_NEGATIVO"},
+                { "41", "ancho"}, { "41", "Ancho"},
+                { "42", "largo"}, { "42", "Largo"},
+                { "43", "ruta"}, { "43", "Ruta"},
+                { "44", "funcion"}, { "44", "Funcion"},
+                { "45", "//"}, { "45", ""},
+                { "46", "\n"}, { "46", ""},
+                { "47", "grafica"}, { "47", "Grafica"},
+                { "48", "nombre"}, { "48", "Nombre"},
+                { "49", "variable"}, { "49", "Variable"}
             };
 
         List<variable> valorVariable = new List<variable>();
@@ -589,7 +659,7 @@ namespace Proyecto1
                 return "+ TOKEN: " + lexema + "\t(Fila: " + fila + ", Col: " + columna + ")" + "\tId Token: " + token[2, 0] + "\tToken: " + token[2, 2] ;
 
             }
-            else if (tipo == "comentario")   //  Si viene un numero:
+            else if (tipo == "comentario")   //  Si viene una cadena:
             {
                 agregarLexema(token[2, 0], lexema, fila, columna, token[2, 2]);
                 return "+ TOKEN: " + lexema + "\t(Fila: " + fila + ", Col: " + columna + ")" + "\tId Token: " + token[2, 0] + "\tToken: " + token[2, 2];
@@ -598,10 +668,16 @@ namespace Proyecto1
 
             return "ERROR INESPERADO...";
         }
+        // **************************    ANALIZADOR SINTACTICO   ***********************
+
+        private void analizarSintaxis(string cadena)
+        {
+            //graficador();
+        }
 
         // **************************    FUNCIONES   ***********************
 
-        //  tamañolienzo
+            //  tamañolienzo
 
         private void tamaniolienzo(int x, int y)
         {
