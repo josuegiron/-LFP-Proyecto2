@@ -1610,6 +1610,7 @@ namespace Proyecto1
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
             escribirEnConsola("Analizando los lexemas...");
+           
 
             tablaDeSimbolos.Clear();
             valorVariable.Clear();
@@ -1847,6 +1848,16 @@ namespace Proyecto1
         {
             string pdfPath = Path.Combine(Application.StartupPath, "Documentos\\Manual tecnico.pdf");
             Process.Start(pdfPath);
+        }
+
+        private void richTextBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void chart1_Click(object sender, EventArgs e)
+        {
+
         }
 
 
