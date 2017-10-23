@@ -1,7 +1,7 @@
 
-T = { id, numero, '=', ',', tV, 'nombre', 'tipo', 'valor', cadena, 'Inicio' 'Math','Fin', 'Declaracion' 'Constantes' 'y' 'Variables', 'Funciones','Generacion' 'graficas', 'constante', 'variable', 'Suma', '(', ')', 
+T = { id, numero, '=', ',', , 'nombre', 'tipo', 'cadenas', 'enteros', 'decimales', 'valor', cadena, comentarioLineal, comentarioMultilieal, 'Inicio' 'Math','Fin', 'Declaracion' 'Constantes' 'y' 'Variables', 'Funciones','Generacion' 'graficas', 'constante', 'variable', 'Suma', '(', ')', 
 	'Resta', 'Multiplicacion', 'Division', 'Potencia', 'Raiz', 'Seno', 'Coseno', 'Tangente', 'Funcion', 'grafica', 'x_positivo', 'x_negativo', 'y_positivo', 'y_negativo',
-	'ancho', 'largo', 'ruta', 'funcion', '//', '\t', '/*', '*/'
+	'ancho', 'largo', 'ruta', 'funcion', '//', '\n', '/*', '*/'
 }
 
 N = { <GRAFICADOR>, <COMENTARIO>, <VARIABLES_Y_CONSONANTES>, <FUNCIONES>, <GRAFICAS>, <COMENTARIO_LINEAL>, <COMENTARIO_MULTILINEA>, <EPSILON>, <FUNCION>, <OTRA_FUNCION>, <GRAFICA>, <OTRA_GRAFICA>, <CUERPO_VARIABLE_Y_CONSTANTE>,
@@ -23,8 +23,8 @@ P = {
 	<CONSTANTE> ::= 'Inicio' 'constante' <NOMBRE> ',' <COMENTARIO> <TIPO> ',' <COMENTARIO> <VALOR> 'Fin' 'constante'
 	<VARIABLE> ::= 'Inicio' 'variable' <NOMBRE> ',' <TIPO> ',' <VALOR> 'Fin' 'variable'
 	<NOMBRE> ::= 'nombre' = id
-	<TIPO> ::= 'tipo' = tV 
-	<VALOR> ::= 'valor' = numero | <OPERACION> | id
+	<TIPO> ::= 'tipo' = 'cadenas' | 'enteros' | 'decimales'
+	<VALOR> ::= 'valor' = numero | <OPERACION> | id | cadena
 	<OPERACION> := <SUMA> | <RESTA> | <MULTIPLICACION> | <DIVISION> | <POTENCIA> | <RAIZ> | <SENO> | <COSENO> | <TANGENTE>
 	<SUMA> ::= 'Suma' '('<OPERACION_BINARIA>')'
 	<RESTA> ::= 'Resta' '('<OPERACION_BINARIA>')'
@@ -50,8 +50,8 @@ P = {
 	<LARGO> ::= 'largo' = numero | <OPERACION> | id
 	<RUTA> ::= 'ruta' = <CADENA>
 	<NOMBRE_FUNCION> ::= 'funcion' = id
-	<CADENA> ::= '"' cadena '"'
+	<CADENA> ::= cadena
 	// Comentarios
-	<COMENTARIO_LINEAL> ::= '//' cadena '\t'
-	<COMENTARIO_MULTILINEA> ::= '/*' cadena '*/'
+	<COMENTARIO_LINEAL> ::= comentarioLineal
+	<COMENTARIO_MULTILINEA> ::= comentarioMultilieal
 }
