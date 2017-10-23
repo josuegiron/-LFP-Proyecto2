@@ -152,7 +152,6 @@ namespace Proyecto1
                             lexema += caracterActual;
                             estadoActual = 14;
                         }
-
                         else
                         {
                             switch (caracterActual)
@@ -348,7 +347,7 @@ namespace Proyecto1
                         break;
 
                     case 11:     //  ESTADO 11
-                        escribirEnConsola(validarLexema(lexema, fila, columna, "comentario"));
+                        escribirEnConsola(validarLexema(lexema, fila, columna, "comentarioLineal"));
                         estadoActual = 0;
                         lexema = "";
                         estadoInicial--;
@@ -385,7 +384,7 @@ namespace Proyecto1
                         break;
 
                     case 13:     //  ESTADO 13
-                        escribirEnConsola(validarLexema(lexema, fila, columna, "comentario"));
+                        escribirEnConsola(validarLexema(lexema, fila, columna, "comentarioMultilinea"));
                         estadoActual = 0;
                         lexema = "";
                         estadoInicial--;
@@ -404,8 +403,8 @@ namespace Proyecto1
                         }
                         break;
 
-                    case 15:     //  ESTADO 11
-                        escribirEnConsola(validarLexema(lexema, fila, columna, "comentario"));
+                    case 15:     //  ESTADO 15
+                        escribirEnConsola(validarLexema(lexema, fila, columna, "cadena"));
                         estadoActual = 0;
                         lexema = "";
                         estadoInicial--;
@@ -457,9 +456,7 @@ namespace Proyecto1
                             estadoInicial--;
                             colActual--;
                         }
-                        
-                            break;
-                    
+                        break;
                     default:
                         agregarError(lexema, fila, columna);
                         escribirEnConsola("- ERROR: No se reconoce el lexema \"" + lexema+"\" en (Fila: " + fila + ", Col: " + columna + ")");
@@ -499,7 +496,7 @@ namespace Proyecto1
                 { "21", ")", "Parentesis cerrado"},
                 { "22", ",", "Coma"},
                 { "23", "=", "Signo igual, asignacion"},
-                { "24", "cadena", ""},
+                { "24", "comentarioLineal", "Secuencia de caracteres y simbolos"},
                 { "25", "graficas", "Palabra reservada"},
                 { "26", "Suma", "Palabra reservada, funcion de operacion"},
                 { "27", "Resta", "Palabra reservada, funcion de operacion"},
@@ -521,10 +518,12 @@ namespace Proyecto1
                 { "43", "ruta", "Palabra reservada"},
                 { "44", "funcion", "Palabra reservada"},
                 { "45", "//", "Palabra reservada"},
-                { "46", "\n", "Palabra reservada"},
+                { "46", "\n", "Salto de linea"},
                 { "47", "grafica", "Palabra reservada"},
                 { "48", "nombre", "Palabra reservada"},
-                { "49", "variable", "Palabra reservada"}
+                { "49", "variable", "Palabra reservada"},
+                { "50", "comentarioMultilinea", "Secuencia de numeros, caracteres y simbolos en varios renglones"},
+                
             };
 
         string[,] palabrasReservadas = new string[,] {
@@ -569,8 +568,8 @@ namespace Proyecto1
                 { "42", "largo"}, { "42", "Largo"},
                 { "43", "ruta"}, { "43", "Ruta"},
                 { "44", "funcion"}, { "44", "Funcion"},
-                { "45", "//"}, { "45", ""},
-                { "46", "\n"}, { "46", ""},
+                { "45", "//"}, 
+                { "46", "\n"}, { "46", "\n"},
                 { "47", "grafica"}, { "47", "Grafica"},
                 { "48", "nombre"}, { "48", "Nombre"},
                 { "49", "variable"}, { "49", "Variable"}
@@ -659,25 +658,246 @@ namespace Proyecto1
                 return "+ TOKEN: " + lexema + "\t(Fila: " + fila + ", Col: " + columna + ")" + "\tId Token: " + token[2, 0] + "\tToken: " + token[2, 2] ;
 
             }
-            else if (tipo == "comentario")   //  Si viene una cadena:
+            else if (tipo == "comentarioLineal")   //  Si viene una cadena:
             {
-                agregarLexema(token[2, 0], lexema, fila, columna, token[2, 2]);
+                agregarLexema(token[24, 0], lexema, fila, columna, token[24, 2]);
                 return "+ TOKEN: " + lexema + "\t(Fila: " + fila + ", Col: " + columna + ")" + "\tId Token: " + token[2, 0] + "\tToken: " + token[2, 2];
 
             }
+            else if (tipo == "comentarioMultilinea")   //  Si viene una cadena:
+            {
+                agregarLexema(token[50, 0], lexema, fila, columna, token[50, 2]);
+                return "+ TOKEN: " + lexema + "\t(Fila: " + fila + ", Col: " + columna + ")" + "\tId Token: " + token[2, 0] + "\tToken: " + token[2, 2];
 
+            }
+            else if (tipo == "cadena")   //  Si viene una cadena:
+            {
+                agregarLexema(token[3, 0], lexema, fila, columna, token[3, 2]);
+                return "+ TOKEN: " + lexema + "\t(Fila: " + fila + ", Col: " + columna + ")" + "\tId Token: " + token[2, 0] + "\tToken: " + token[2, 2];
+
+            }
             return "ERROR INESPERADO...";
         }
+
+
+
+
         // **************************    ANALIZADOR SINTACTICO   ***********************
 
+
+
+        int guia;
+
+        private void saltarLinea()
+        {
+            
+            try
+            {
+                lexema simbolo = tablaDeSimbolos.Find(x => x.fila.Equals(tablaDeSimbolos[guia].fila + 1));
+                guia = simbolo.id-1;
+                
+                if (tablaDeSimbolos[guia].idToken == token[24, 0] || tablaDeSimbolos[guia].idToken == token[50, 0])
+                {
+                    guia++;
+                }
+                
+            }
+            catch { }
+
+        }
+
+        private void continuar()
+        {
+            guia++;
+            try
+            {
+                if (tablaDeSimbolos[guia].idToken == token[24, 0] || tablaDeSimbolos[guia].idToken == token[50, 0])
+                {
+                    continuar();
+                }
+            }
+            catch { }
+            
+        }
+
+        private Boolean validar(int id, int idToken)
+        {
+            try
+            {
+                if (tablaDeSimbolos[id].idToken == token[idToken, 0])
+                {
+                    continuar();
+                    return true;
+                }
+                else
+                {
+                    
+                    
+                    return false;
+                }
+            }
+            catch { return false; }
+        }
+
+        // SE INICIA EL ANALIZADO LEXICO
         private void analizarSintaxis(string cadena)
         {
-            //graficador();
+            guia = 0;
+            graficador();
+        }
+
+        private void graficador()
+        {
+            
+            for(int i = 0; i < 7; i++)
+            {
+                
+
+                switch (i)
+                {
+                    case 0:
+                        if (!validar(guia, 9))
+                        {
+                            escribirEnConsola("Se esperaba: 'Inicio Math'");
+                            saltarLinea();
+                            i = 1;
+                        }
+                        break;
+                    case 1:
+                        if (!validar(guia, 10))
+                        {
+                            escribirEnConsola("Se esperaba: 'Math'");
+                            saltarLinea();
+                            i = 1;
+                        }
+                        break;
+                    case 2:
+                        variablesYConstantes();
+                        break;
+                    case 3:
+                       
+                        break;
+                    case 4:
+                        //graficas();
+                        break;
+                    case 5:
+                        if (!validar(guia, 11))
+                        {
+                            escribirEnConsola("Se esperaba: 'Fin Math'");
+                            saltarLinea();
+                            i = 6;
+                        }
+                        break;
+                    case 6:
+                        if (!validar(guia, 10))
+                        {
+                            escribirEnConsola("Se esperaba: 'Math'");
+                            saltarLinea();
+                            i = 6;
+                        }
+                        break;
+                }
+                
+            }
+
+            
+        }
+
+        public void variablesYConstantes()
+        {
+            for (int i = 0; i < 11; i++)
+            {
+
+
+                switch (i)
+                {
+                    case 0:
+                        if (!validar(guia, 9))
+                        {
+                            escribirEnConsola("Se esperaba: 'Inicio Declaracion Constantes y Variables'");
+                            saltarLinea();
+                            i = 4;
+                        }
+                        break;
+                    case 1:
+                        if (!validar(guia, 12))
+                        {
+                            escribirEnConsola("Se esperaba: 'Declaracion Constantes y Variables'");
+                            saltarLinea();
+                            i = 4;
+                        }
+                        break;
+                    case 2:
+                        if (!validar(guia, 13))
+                        {
+                            escribirEnConsola("Se esperaba: 'Constantes y Variables'");
+                            saltarLinea();
+                            i = 4;
+                        }
+                        break;
+                    case 3:
+                        if (!validar(guia, 14))
+                        {
+                            escribirEnConsola("Se esperaba: 'y Variables'");
+                            saltarLinea();
+                            i = 4;
+                        }
+                        break;
+                    case 4:
+                        if (!validar(guia, 15))
+                        {
+                            escribirEnConsola("Se esperaba: 'Variables'");
+                            saltarLinea();
+                            i = 4;
+                        }
+                        break;
+                    case 5:
+                      
+                        //variablesYConstantes();
+                        break;
+                    case 6:
+                        if (!validar(guia, 11))
+                        {
+                            escribirEnConsola("Se esperaba: 'Fin'");
+                            saltarLinea();
+                        }
+                        break;
+                    case 7:
+                        if (!validar(guia, 12))
+                        {
+                            escribirEnConsola("Se esperaba: 'Declaracion'");
+                            saltarLinea();
+                        }
+                        break;
+                    case 8:
+                        if (!validar(guia, 13))
+                        {
+                            escribirEnConsola("Se esperaba: 'Constantes'");
+                            saltarLinea();
+                        }
+                        break;
+                    case 9:
+                        if (!validar(guia, 14))
+                        {
+                            escribirEnConsola("Se esperaba: 'y'");
+                            saltarLinea();
+                        }
+                        break;
+                    case 10:
+                        if (!validar(guia, 15))
+                        {
+                            escribirEnConsola("Se esperaba: 'Variables'");
+                            saltarLinea();
+                        }
+                        break;
+                }
+
+            }
         }
 
         // **************************    FUNCIONES   ***********************
 
-            //  tamañolienzo
+        //  tamañolienzo
 
         private void tamaniolienzo(int x, int y)
         {
