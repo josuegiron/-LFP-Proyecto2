@@ -576,7 +576,11 @@ namespace Proyecto1
                 { "49", "variable"}, { "49", "Variable"}
             };
 
-        List<variable> valorVariable = new List<variable>();
+        
+
+
+        List<variable> tablaVariables = new List<variable>();
+        List<variable> tablaConstantes = new List<variable>();
         List<lexema> tablaDeSimbolos = new List<lexema>();
         List<error> tablaDeErrores = new List<error>();
         int num = 1;
@@ -593,31 +597,68 @@ namespace Proyecto1
             numError++;
         }
 
-        private void agregarVariable(string nombre, int valor)
+        private void agregarVariable(string nombre, string valor, string tipo)
         {
-            variable var = valorVariable.Find(x => x.nombre.Contains(nombre));
-            if (var==null)
+            variable var = tablaVariables.Find(x => x.nombre.Contains(nombre));
+            variable cons = tablaConstantes.Find(x => x.nombre.Contains(nombre));
+
+            if (var==null && cons == null)
             {
-                valorVariable.Add(new variable() { id = num, nombre = nombre, valor = valor });
-                //escribirEnConsola("Se asigna la variable: " + nombre + ": " + valor);
+                tablaVariables.Add(new variable() { id = num, nombre = nombre, valor = valor, tipo = tipo  });
+                escribirEnConsola("Variable: {id: " + nomVarC + ", tipo: " + tipoVarC + ", valor: " + valVarC + "}");
             }
             else
             {
-                var.valor = valor;
-                //escribirEnConsola("Se asigna la variable: " + nombre + ": " + valor);
+                escribirEnConsola("El id de la variable ya ha sido utilizado...");
             }
            
             num++;
            
         }
 
-        private string obrenerVariable(string nombre)
+        private string obtenerVariable(string nombre)
         {
 
-            variable var = valorVariable.Find(x => x.nombre.Contains(nombre));
+            variable var = tablaVariables.Find(x => x.nombre.Contains(nombre));
             if(var == null)
             {
-                return nombre;
+                return "";
+            }
+            else
+            {
+                return Convert.ToString(var.valor);
+            }
+
+        }
+
+
+        private void agregarConstante(string nombre, string valor, string tipo)
+        {
+            variable var = tablaVariables.Find(x => x.nombre.Contains(nombre));
+            variable cons = tablaConstantes.Find(x => x.nombre.Contains(nombre));
+
+            if (var == null && cons == null)
+            {
+                tablaConstantes.Add(new variable() { id = num, nombre = nombre, valor = valor, tipo = tipo });
+                escribirEnConsola("Constante: {id: " + nomVarC + ", tipo: " + tipoVarC + ", valor: " + valVarC + "}");
+            }
+            else
+            {
+                escribirEnConsola("El id de la constante ya ha sido utilizado...");
+            }
+
+            num++;
+            num++;
+
+        }
+        
+        private string obtenerConstante(string nombre)
+        {
+
+            variable var = tablaConstantes.Find(x => x.nombre.Contains(nombre));
+            if (var == null)
+            {
+                return "";
             }
             else
             {
@@ -688,6 +729,9 @@ namespace Proyecto1
 
 
         int numLexema = 0;
+        string nomVarC = "";
+        string tipoVarC = "";
+        string valVarC = "";
 
         private lexema obtenerlexema(int idLexema)
         {
@@ -877,6 +921,10 @@ namespace Proyecto1
         {
             if (validar(9))
             {
+                nomVarC = "";
+                valVarC = "";
+                tipoVarC = "";
+
                 switch (obtenerlexema(numLexema + 1).idToken)
                 {
                     case "18":
@@ -905,7 +953,15 @@ namespace Proyecto1
 
                 if (validar(18))
                 {
-
+                    if(valVarC != "")
+                    {
+                        agregarConstante(nomVarC, valVarC, tipoVarC);
+                    }
+                    else
+                    {
+                        escribirEnConsola("Una o mas variables o constantes no han sido declaradas...");
+                    }
+                    
                 }
                 else
                 {
@@ -926,7 +982,15 @@ namespace Proyecto1
 
                 if (validar(49))
                 {
-
+                    if (valVarC != "")
+                    {
+                        agregarVariable(nomVarC, valVarC, tipoVarC);
+                        
+                    }
+                    else
+                    {
+                        escribirEnConsola("Una o mas variables o constantes no han sido declaradas...");
+                    }
                 }
                 else
                 {
@@ -1113,7 +1177,7 @@ namespace Proyecto1
                 {
                     if (validar(2))
                     {
-
+                        nomVarC = obtenerlexema(numLexema).nombre;
                     }
                     else
                     {
@@ -1140,12 +1204,16 @@ namespace Proyecto1
                     switch (obtenerlexema(numLexema + 1).idToken)
                     {
                         case "1":
+                            valVarC = obtenerlexema(numLexema + 1).nombre;
                             numLexema++;
                             break;
                         case "2":
+                            valVarC = obtenerConstante(obtenerlexema(numLexema + 1).nombre);
+                            valVarC = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
                             numLexema++;
                             break;
                         case "3":
+                            valVarC = obtenerlexema(numLexema + 1).nombre;
                             numLexema++;
                             break;
                         default:
@@ -1173,12 +1241,15 @@ namespace Proyecto1
                     switch (obtenerlexema(numLexema+1).idToken)
                     {
                         case "5":
+                            tipoVarC = obtenerlexema(numLexema + 1).nombre;
                             numLexema++;
                             break;
                         case "6":
+                            tipoVarC = obtenerlexema(numLexema + 1).nombre;
                             numLexema++;
                             break;
                         case "7":
+                            tipoVarC = obtenerlexema(numLexema + 1).nombre;
                             numLexema++;
                             break;
                         default:
@@ -1878,7 +1949,7 @@ namespace Proyecto1
                         {
                             estadoActual = 4;
                             comando += tokenactual + " ";
-                            expresion += obrenerVariable(tokenactual) + " ";
+                            expresion += obtenerVariable(tokenactual) + " ";
                         }
                         else
                         {
@@ -1909,7 +1980,7 @@ namespace Proyecto1
                         {
                             estadoActual = 6;
                             comando += tokenactual + " ";
-                            expresion += obrenerVariable(tokenactual) + " ";
+                            expresion += obtenerVariable(tokenactual) + " ";
                             
                         }
                         else if (tId == "1")
@@ -1955,7 +2026,7 @@ namespace Proyecto1
                         if (ValidarExpresion(expresion))
                         {
                             int valorVariable = evaluarExpresion(expresion);
-                            agregarVariable(tokenVariable, valorVariable);
+                            //agregarVariable(tokenVariable, valorVariable);
                         }
                         else
                         {
@@ -2006,7 +2077,7 @@ namespace Proyecto1
                         else { estadoActual = 500; }
                         break;
                     case 12:
-                        expresion = obrenerVariable(tokenVariable);
+                        expresion = obtenerVariable(tokenVariable);
                         if (ValidarExpresion(expresion))
                         {
                             escribirEnConsola(expresion);
@@ -2037,7 +2108,7 @@ namespace Proyecto1
                         {
                             estadoActual = 14;
                             comando += tokenactual + " ";
-                            x = obrenerVariable(tokenactual) + " ";
+                            x = obtenerVariable(tokenactual) + " ";
                         }
                         else { estadoActual = 500; }
                         break;
@@ -2061,7 +2132,7 @@ namespace Proyecto1
                         {
                             estadoActual = 16;
                             comando += tokenactual + " ";
-                            y = obrenerVariable(tokenactual) + " ";
+                            y = obtenerVariable(tokenactual) + " ";
                         }
                         else { estadoActual = 500; }
                         break;
@@ -2112,7 +2183,7 @@ namespace Proyecto1
                         {
                             estadoActual = 19;
                             comando += tokenactual + " ";
-                            x = obrenerVariable(tokenactual) + " ";
+                            x = obtenerVariable(tokenactual) + " ";
                         }
                         else { estadoActual = 500; }
                         break;
@@ -2353,7 +2424,8 @@ namespace Proyecto1
            
 
             tablaDeSimbolos.Clear();
-            valorVariable.Clear();
+            tablaVariables.Clear();
+            tablaConstantes.Clear();
             tablaDeErrores.Clear();
             num = 1;
             numError = 1;
@@ -2636,7 +2708,8 @@ public class variable
 {
     public int id { get; set; }
     public string nombre { get; set; }
-    public int valor { get; set; }
+    public string tipo { get; set; }
+    public string valor { get; set; }
 }
 
 
