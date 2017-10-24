@@ -200,7 +200,7 @@ namespace Proyecto1
                         {
                             // metodo enviar lexema
                             // ver si es un lexema valido
-                            escribirEnConsola( validarLexema(lexema, fila, columna, "numero"));
+                            validarLexema(lexema, fila, columna, "numero");
                             estadoActual = 0;
                             lexema = "";
                             estadoInicial--;
@@ -231,7 +231,7 @@ namespace Proyecto1
                         {
                             // metodo enviar lexema
                             // ver si es un lexema valido
-                            escribirEnConsola( validarLexema(lexema, fila, columna, "reservado"));
+                            validarLexema(lexema, fila, columna, "reservado");
                             estadoActual = 0;
                             lexema = "";
                             estadoInicial--;
@@ -240,35 +240,35 @@ namespace Proyecto1
                         }
                         break;
                     case 3:     //  ESTADO 3
-                        escribirEnConsola( validarLexema(lexema, fila, columna, "reservado"));
+                        validarLexema(lexema, fila, columna, "reservado");
                         estadoActual = 0;
                         lexema = "";
                         estadoInicial--;
                         colActual--;
                         break;
                     case 4:     //  ESTADO 4
-                        escribirEnConsola( validarLexema(lexema, fila, columna, "reservado"));
+                        validarLexema(lexema, fila, columna, "reservado");
                         estadoActual = 0;
                         lexema = "";
                         estadoInicial--;
                         colActual--;
                         break;
                     case 5:     //  ESTADO 5
-                        escribirEnConsola( validarLexema(lexema, fila, columna, "reservado"));
+                        validarLexema(lexema, fila, columna, "reservado");
                         estadoActual = 0;
                         lexema = "";
                         estadoInicial--;
                         colActual--;
                         break;
                     case 6:     //  ESTADO 6
-                        escribirEnConsola( validarLexema(lexema, fila, columna, "reservado"));
+                        validarLexema(lexema, fila, columna, "reservado");
                         estadoActual = 0;
                         lexema = "";
                         estadoInicial--;
                         colActual--;
                         break;
                     case 7:     //  ESTADO 7
-                        escribirEnConsola( validarLexema(lexema, fila, columna, "reservado"));
+                        validarLexema(lexema, fila, columna, "reservado");
                         estadoActual = 0;
                         lexema = "";
                         estadoInicial--;
@@ -347,7 +347,7 @@ namespace Proyecto1
                         break;
 
                     case 11:     //  ESTADO 11
-                        escribirEnConsola(validarLexema(lexema, fila, columna, "comentarioLineal"));
+                        validarLexema(lexema, fila, columna, "comentarioLineal");
                         estadoActual = 0;
                         lexema = "";
                         estadoInicial--;
@@ -385,7 +385,7 @@ namespace Proyecto1
                         break;
 
                     case 13:     //  ESTADO 13
-                        escribirEnConsola(validarLexema(lexema, fila, columna, "comentarioMultilinea"));
+                        validarLexema(lexema, fila, columna, "comentarioMultilinea");
                         estadoActual = 0;
                         lexema = "";
                         estadoInicial--;
@@ -405,7 +405,7 @@ namespace Proyecto1
                         break;
 
                     case 15:     //  ESTADO 15
-                        escribirEnConsola(validarLexema(lexema, fila, columna, "cadena"));
+                        validarLexema(lexema, fila, columna, "cadena");
                         estadoActual = 0;
                         lexema = "";
                         estadoInicial--;
@@ -451,7 +451,7 @@ namespace Proyecto1
                         }
                         else
                         {
-                            escribirEnConsola(validarLexema(lexema, fila, columna, "numero"));
+                            validarLexema(lexema, fila, columna, "numero");
                             estadoActual = 0;
                             lexema = "";
                             estadoInicial--;
@@ -1137,18 +1137,25 @@ namespace Proyecto1
             {
                 if (validar(23))
                 {
-                    if (validar(2))
+                    switch (obtenerlexema(numLexema + 1).idToken)
                     {
-
-                    }
-                    else
-                    {
-                        escribirEnConsola("Se esperaba secuencia de caracteres" + error(numLexema));
+                        case "1":
+                            numLexema++;
+                            break;
+                        case "2":
+                            numLexema++;
+                            break;
+                        case "3":
+                            numLexema++;
+                            break;
+                        default:
+                            operacion();
+                            break;
                     }
                 }
                 else
                 {
-                    escribirEnConsola("Se esperaba '='" + error(numLexema));
+                    escribirEnConsola("Se esperaba '=' " + error(numLexema));
                 }
 
             }
@@ -1192,10 +1199,225 @@ namespace Proyecto1
             }
         }
 
+        public void operacion()
+        {
+            switch (obtenerlexema(numLexema + 1).idToken)
+            {
+                case "26":
+                    suma();
+                    break;
+                case "27":
+                   resta();
+                    break;
+                case "28":
+                    multiplicacion();
+                    break;
+                case "29":
+                    division();
+                    break;
+                case "30":
+                    potencia();
+                    break;
+                case "31":
+                    raizCuadrada();
+                    break;
+                case "32":
+                    seno();
+                    break;
+                case "33":
+                    coseno();
+                    break;
+                case "34":
+                    tangente();
+                    break;
+                default:
+                    escribirEnConsola("Se esperaba numero, Id, cadena de caracteres o una operacion" + error(numLexema));
+                    break;
+            }
+        }
+
+        public void suma()
+        {
+            if (validar(26))
+            {
+                operacionBinaria();
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'Suma'" + error(numLexema));
+            }
+        }
+        public void resta()
+        {
+            if (validar(27))
+            {
+                operacionBinaria();
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'Resta'" + error(numLexema));
+            }
+        }
+
+        public void multiplicacion()
+        {
+            if (validar(28))
+            {
+                operacionBinaria();
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'Multiplicar'" + error(numLexema));
+            }
+        }
+
+        public void division()
+        {
+            if (validar(29))
+            {
+                operacionBinaria();
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'Dividir'" + error(numLexema));
+            }
+        }
+
+        public void potencia()
+        {
+            if (validar(30))
+            {
+                operacionBinaria();
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'Potencia'" + error(numLexema));
+            }
+        }
+
+        public void raizCuadrada()
+        {
+            if (validar(31))
+            {
+                operacionUnaria();
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'RaizCuadrada'" + error(numLexema));
+            }
+        }
+
+        public void seno()
+        {
+            if (validar(32))
+            {
+                operacionUnaria();
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'Seno'" + error(numLexema));
+            }
+        }
+
+        public void coseno()
+        {
+            if (validar(33))
+            {
+                operacionUnaria();
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'Coseno'" + error(numLexema));
+            }
+        }
+
+        public void tangente()
+        {
+            if (validar(34))
+            {
+                operacionUnaria();
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'Tangente'" + error(numLexema));
+            }
+        }
+
+        public void operacionBinaria()
+        {
+            if (validar(20))
+            {
+                switch (obtenerlexema(numLexema + 1).idToken)
+                {
+                    case "1":
+                        numLexema++;
+                        break;
+                    case "2":
+                        numLexema++;
+                        break;
+                    default:
+                        operacion();
+                        break;
+                }
+
+                if (!validar(22))
+                {
+                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                }
+
+                switch (obtenerlexema(numLexema + 1).idToken)
+                {
+                    case "1":
+                        numLexema++;
+                        break;
+                    case "2":
+                        numLexema++;
+                        break;
+                    default:
+                        operacion();
+                        break;
+                }
+                if (!validar(21))
+                {
+                    escribirEnConsola("Se esperaba ')'" + error(numLexema));
+                }
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba '('" + error(numLexema));
+            }
+        }
+
+        public void operacionUnaria()
+        {
+            if (validar(20))
+            {
+                switch (obtenerlexema(numLexema + 1).idToken)
+                {
+                    case "1":
+                        numLexema++;
+                        break;
+                    case "2":
+                        numLexema++;
+                        break;
+                    default:
+                        operacion();
+                        break;
+                }
+                if (!validar(21))
+                {
+                    escribirEnConsola("Se esperaba ')'" + error(numLexema));
+                }
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba '('" + error(numLexema));
+            }
+        }
 
         // **************************    FUNCIONES   ***********************
 
-        //  tamañolienzo
+            //  tamañolienzo
 
         private void tamaniolienzo(int x, int y)
         {
