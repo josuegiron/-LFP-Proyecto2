@@ -322,7 +322,7 @@ namespace Proyecto1
                         {
                             
                             agregarError(lexema, fila, columna);
-                            escribirEnConsola("- ERROR: No se reconoce el lexema \"" + lexema  + "\" en (Fila: " + fila + ", Col: " + columna + ")");
+                            escribirEnConsola("- ERROR LEXICO: No se reconoce el lexema \"" + lexema  + "\" en (Fila: " + fila + ", Col: " + columna + ")");
                            
                             estadoActual = 0;
                             lexema = "";
@@ -460,7 +460,7 @@ namespace Proyecto1
                         break;
                     default:
                         agregarError(lexema, fila, columna);
-                        escribirEnConsola("- ERROR: No se reconoce el lexema \"" + lexema+"\" en (Fila: " + fila + ", Col: " + columna + ")");
+                        escribirEnConsola("- ERROR LEXICO: No se reconoce el lexema \"" + lexema+"\" en (Fila: " + fila + ", Col: " + columna + ")");
                         estadoInicial--;
                         estadoActual = 0;
                         lexema = "";
@@ -609,7 +609,7 @@ namespace Proyecto1
             }
             else
             {
-                escribirEnConsola("El id de la variable ya ha sido utilizado...");
+                escribirEnConsola("El id de la variable ya ha sido utilizado: "+ nombre);
             }
            
             num++;
@@ -644,7 +644,7 @@ namespace Proyecto1
             }
             else
             {
-                escribirEnConsola("El id de la constante ya ha sido utilizado...");
+                escribirEnConsola("El id de la constante ya ha sido utilizado: "+ nombre);
             }
 
             num++;
@@ -752,7 +752,7 @@ namespace Proyecto1
             {
                 lexema lexema = tablaDeSimbolos.Find(x => x.id.Equals(idLexema));
                 numLexema++;
-                return " Error en: [ Fila: " + lexema.fila + " - Columna: " + lexema.columna + " ]";
+                return " en (Fila: " + lexema.fila + ", Col: " + lexema.columna + ")";
             }
             catch { return null; }
         }
@@ -818,23 +818,23 @@ namespace Proyecto1
                         }
                         else
                         {
-                            escribirEnConsola("Se esperaba 'Math'" + error(numLexema));
+                            escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Math'" + error(numLexema));
                         }
 
                     }
                     else
                     {
-                        escribirEnConsola("Se esperaba 'Fin Math'" + error(numLexema));
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Fin Math'" + error(numLexema));
                     }
                 }
                 else
                 {
-                    escribirEnConsola("Se esperaba 'Math'" + error(numLexema));
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Math'" + error(numLexema));
                 }
             }
             else
             {
-                escribirEnConsola("Se esperaba 'Inicio Math'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Inicio Math'" + error(numLexema));
             }
         }
 
@@ -865,54 +865,54 @@ namespace Proyecto1
                                                 }
                                                 else
                                                 {
-                                                    escribirEnConsola("Se esperaba 'Variables'" + error(numLexema));
+                                                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Variables'" + error(numLexema));
                                                 }
                                             }
                                             else
                                             {
-                                                escribirEnConsola("Se esperaba 'y Variables'" + error(numLexema));
+                                                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'y Variables'" + error(numLexema));
                                             }
 
                                         }
                                         else
                                         {
-                                            escribirEnConsola("Se esperaba 'Constantes y Variables'" + error(numLexema));
+                                            escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Constantes y Variables'" + error(numLexema));
                                         }
                                     }
                                     else
                                     {
-                                        escribirEnConsola("Se esperaba 'Declaracion Constantes y Variables'" + error(numLexema));
+                                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Declaracion Constantes y Variables'" + error(numLexema));
                                     }
                                 }
                                 else
                                 {
-                                    escribirEnConsola("Se esperaba 'Fin Declaracion Constantes y Variables'" + error(numLexema));
+                                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Fin Declaracion Constantes y Variables'" + error(numLexema));
                                 }
                             }
                             else
                             {
-                                escribirEnConsola("Se esperaba 'Variables'" + error(numLexema));
+                                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Variables'" + error(numLexema));
                             }
                         }
                         else
                         {
-                            escribirEnConsola("Se esperaba 'y Variables'" + error(numLexema));
+                            escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'y Variables'" + error(numLexema));
                         }
 
                     }
                     else
                     {
-                        escribirEnConsola("Se esperaba 'Constantes y Variables'" + error(numLexema));
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Constantes y Variables'" + error(numLexema));
                     }
                 }
                 else
                 {
-                    escribirEnConsola("Se esperaba 'Declaracion Constantes y Variables'" + error(numLexema));
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Declaracion Constantes y Variables'" + error(numLexema));
                 }
             }
             else
             {
-                escribirEnConsola("Se esperaba 'Inicio Declaracion Constantes y Variables'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Inicio Declaracion Constantes y Variables'" + error(numLexema));
             }
         }
 
@@ -934,7 +934,7 @@ namespace Proyecto1
                         variable();
                         break;
                     default:
-                        escribirEnConsola("Se esperaba 'Constante' o 'Variable'" + error(numLexema));
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Constante' o 'Variable'" + error(numLexema));
                         break;
                 }
                 cuerpoConstantesYVariables();
@@ -965,12 +965,12 @@ namespace Proyecto1
                 }
                 else
                 {
-                    escribirEnConsola("Se esperaba 'Constante'" + error(numLexema));
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Constante'" + error(numLexema));
                 }
             }
             else
             {
-                escribirEnConsola("Se esperaba 'constante'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'constante'" + error(numLexema));
             }
         }
 
@@ -994,12 +994,12 @@ namespace Proyecto1
                 }
                 else
                 {
-                    escribirEnConsola("Se esperaba 'Variable'" + error(numLexema));
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Variable'" + error(numLexema));
                 }
             }
             else
             {
-                escribirEnConsola("Se esperaba 'Variable'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Variable'" + error(numLexema));
             }
         }
 
@@ -1024,12 +1024,12 @@ namespace Proyecto1
                                     }
                                     else
                                     {
-                                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                                     }
                                 }
                                 else
                                 {
-                                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                                 }
                                 break;
                             case "8":
@@ -1043,12 +1043,12 @@ namespace Proyecto1
                                     }
                                     else
                                     {
-                                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                                     }
                                 }
                                 else
                                 {
-                                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                                 }
                                 break;
                         }
@@ -1056,7 +1056,7 @@ namespace Proyecto1
                     }
                     else
                     {
-                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                     }
                     break;
                 case "8":
@@ -1076,12 +1076,12 @@ namespace Proyecto1
                                     }
                                     else
                                     {
-                                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                                     }
                                 }
                                 else
                                 {
-                                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                                 }
                                 break;
                             case "4":
@@ -1095,12 +1095,12 @@ namespace Proyecto1
                                     }
                                     else
                                     {
-                                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                                     }
                                 }
                                 else
                                 {
-                                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                                 }
                                 break;
                         }
@@ -1108,7 +1108,7 @@ namespace Proyecto1
                     }
                     else
                     {
-                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                     }
                     break;
                 case "4":
@@ -1128,12 +1128,12 @@ namespace Proyecto1
                                     }
                                     else
                                     {
-                                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                                     }
                                 }
                                 else
                                 {
-                                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                                 }
                                 break;
                             case "48":
@@ -1147,12 +1147,12 @@ namespace Proyecto1
                                     }
                                     else
                                     {
-                                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                                     }
                                 }
                                 else
                                 {
-                                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                                 }
                                 break;
                         }
@@ -1160,7 +1160,7 @@ namespace Proyecto1
                     }
                     else
                     {
-                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                     }
                     break;
             }
@@ -1181,18 +1181,18 @@ namespace Proyecto1
                     }
                     else
                     {
-                        escribirEnConsola("Se esperaba secuencia de caracteres" + error(numLexema));
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba secuencia de caracteres" + error(numLexema));
                     }
                 }
                 else
                 {
-                    escribirEnConsola("Se esperaba '='" + error(numLexema));
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba '='" + error(numLexema));
                 }
 
             }
             else
             {
-                escribirEnConsola("Se esperaba un 'nombre'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba un 'nombre'" + error(numLexema));
             }
         }
         public void valor()
@@ -1223,13 +1223,13 @@ namespace Proyecto1
                 }
                 else
                 {
-                    escribirEnConsola("Se esperaba '=' " + error(numLexema));
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba '=' " + error(numLexema));
                 }
 
             }
             else
             {
-                escribirEnConsola("Se esperaba un 'valor'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba un 'valor'" + error(numLexema));
             }
         }
         public void tipo()
@@ -1253,20 +1253,20 @@ namespace Proyecto1
                             numLexema++;
                             break;
                         default:
-                            escribirEnConsola("Se esperaba 'cadena', 'entero' o 'decimal'" + error(numLexema));
+                            escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'cadena', 'entero' o 'decimal'" + error(numLexema));
                             break;
                     }
                     
                 }
                 else
                 {
-                    escribirEnConsola("Se esperaba '='" + error(numLexema));
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba '='" + error(numLexema));
                 }
 
             }
             else
             {
-                escribirEnConsola("Se esperaba 'tipo'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'tipo'" + error(numLexema));
             }
         }
 
@@ -1303,7 +1303,7 @@ namespace Proyecto1
                     valor = tangente();
                     break;
                 default:
-                    escribirEnConsola("Se esperaba numero, Id, cadena de caracteres o una operacion" + error(numLexema));
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba numero, Id, cadena de caracteres o una operacion" + error(numLexema));
                     break;
             }
             return valor;
@@ -1319,7 +1319,7 @@ namespace Proyecto1
             }
             else
             {
-                escribirEnConsola("Se esperaba 'Suma'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Suma'" + error(numLexema));
             }
             return "" + total;
         }
@@ -1333,7 +1333,7 @@ namespace Proyecto1
             }
             else
             {
-                escribirEnConsola("Se esperaba 'Resta'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Resta'" + error(numLexema));
             }
             return "" + total;
         }
@@ -1348,7 +1348,7 @@ namespace Proyecto1
             }
             else
             {
-                escribirEnConsola("Se esperaba 'Multiplicar'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Multiplicar'" + error(numLexema));
             }
             return "" + total;
         }
@@ -1363,7 +1363,7 @@ namespace Proyecto1
             }
             else
             {
-                escribirEnConsola("Se esperaba 'Dividir'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Dividir'" + error(numLexema));
             }
             return "" + total;
         }
@@ -1378,7 +1378,7 @@ namespace Proyecto1
             }
             else
             {
-                escribirEnConsola("Se esperaba 'Potencia'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Potencia'" + error(numLexema));
             }
             return "" + total;
         }
@@ -1393,7 +1393,7 @@ namespace Proyecto1
             }
             else
             {
-                escribirEnConsola("Se esperaba 'RaizCuadrada'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'RaizCuadrada'" + error(numLexema));
             }
             return "" + total;
         }
@@ -1408,7 +1408,7 @@ namespace Proyecto1
             }
             else
             {
-                escribirEnConsola("Se esperaba 'Seno'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Seno'" + error(numLexema));
             }
             return "" + total;
         }
@@ -1423,7 +1423,7 @@ namespace Proyecto1
             }
             else
             {
-                escribirEnConsola("Se esperaba 'Coseno'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Coseno'" + error(numLexema));
             }
             return "" + total;
         }
@@ -1438,7 +1438,7 @@ namespace Proyecto1
             }
             else
             {
-                escribirEnConsola("Se esperaba 'Tangente'" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Tangente'" + error(numLexema));
             }
             return "" + total;
         }
@@ -1467,7 +1467,7 @@ namespace Proyecto1
 
                 if (!validar(22))
                 {
-                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                 }
 
                 switch (obtenerlexema(numLexema + 1).idToken)
@@ -1488,12 +1488,12 @@ namespace Proyecto1
                 }
                 if (!validar(21))
                 {
-                    escribirEnConsola("Se esperaba ')'" + error(numLexema));
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba ')'" + error(numLexema));
                 }
             }
             else
             {
-                escribirEnConsola("Se esperaba '('" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba '('" + error(numLexema));
             }
             if (valores[0, 0] == "")
             {
@@ -1527,12 +1527,12 @@ namespace Proyecto1
                 }
                 if (!validar(21))
                 {
-                    escribirEnConsola("Se esperaba ')'" + error(numLexema));
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba ')'" + error(numLexema));
                 }
             }
             else
             {
-                escribirEnConsola("Se esperaba '('" + error(numLexema));
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba '('" + error(numLexema));
             }
             return valor;
         }
