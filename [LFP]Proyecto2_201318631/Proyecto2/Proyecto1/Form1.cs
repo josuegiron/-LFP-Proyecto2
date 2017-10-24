@@ -478,9 +478,9 @@ namespace Proyecto1
                 { "2", "id", "Cadena de numeros y letras" },
                 { "3", "cadena", "Secuencia de caracteres" },
                 { "4", "tipo", "Palabra reservada" },
-                { "5", "cadenas", "Palabra reservada" },
-                { "6", "enteros", "Palabra reservada" },
-                { "7", "decimales", "Palabra reservada" },
+                { "5", "cadena", "Palabra reservada" },
+                { "6", "entero", "Palabra reservada" },
+                { "7", "decimal", "Palabra reservada" },
                 { "8", "valor", "Palabra reservada" },
                 { "9", "Inicio", "Palabra reservada" },
                 { "10", "Math", "Palabra reservada" },
@@ -691,6 +691,7 @@ namespace Proyecto1
 
         private lexema obtenerlexema(int idLexema)
         {
+            continuar();
             try
             {
                 lexema lexema = tablaDeSimbolos.Find(x => x.id.Equals(idLexema));
@@ -702,9 +703,11 @@ namespace Proyecto1
 
         public string error(int idLexema)
         {
+            continuar();
             try
             {
                 lexema lexema = tablaDeSimbolos.Find(x => x.id.Equals(idLexema));
+                numLexema++;
                 return " Error en: [ Fila: " + lexema.fila + " - Columna: " + lexema.columna + " ]";
             }
             catch { return null; }
@@ -733,6 +736,7 @@ namespace Proyecto1
                 if (tablaDeSimbolos[numLexema].idToken == token[idToken, 0])
                 {
                     numLexema++;
+                    continuar();
                     return true;
                 }
                 else
@@ -766,7 +770,7 @@ namespace Proyecto1
                     {
                         if (validar(10))
                         {
-                            escribirEnConsola("Analisis Sintactico correcto, se compila...'");
+                            escribirEnConsola("SINTAXIS CORRECTA...");
                         }
                         else
                         {
@@ -871,15 +875,324 @@ namespace Proyecto1
 
         public void cuerpoConstantesYVariables()
         {
-            if (validar(0))
+            if (validar(9))
             {
-                switch(numLexema){
-                case :
-                    
+                switch (obtenerlexema(numLexema + 1).idToken)
+                {
+                    case "18":
+                        constante();
+                        break;
+                    case "49":
+                        variable();
+                        break;
+                    default:
+                        escribirEnConsola("Se esperaba 'Constante' o 'Variable'" + error(numLexema));
+                        break;
+                }
+                cuerpoConstantesYVariables();
             }
+            else
+            {
+                numLexema--;
+            }
+        }
+        
+        public void constante()
+        {
+            if (validar(18))
+            {
+                atributos();
+
+                if (validar(18))
+                {
+
+                }
+                else
+                {
+                    escribirEnConsola("Se esperaba 'Constante'" + error(numLexema));
+                }
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'constante'" + error(numLexema));
+            }
+        }
+
+        public void variable()
+        {
+            if (validar(49))
+            {
+                atributos();
+
+                if (validar(49))
+                {
+
+                }
+                else
+                {
+                    escribirEnConsola("Se esperaba 'Variable'" + error(numLexema));
+                }
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'Variable'" + error(numLexema));
+            }
+        }
+
+        public void atributos()
+        {
+            switch (obtenerlexema(numLexema + 1).idToken)
+            {
+                case "48":
+                    nombre();
+                    if (validar(22))
+                    {
+                        switch (obtenerlexema(numLexema + 1).idToken)
+                        {
+                            case "4":
+                                tipo();
+                                if (validar(22))
+                                {
+                                    valor();
+                                    if (validar(11))
+                                    {
+                                        // se acepta
+                                    }
+                                    else
+                                    {
+                                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                    }
+                                }
+                                else
+                                {
+                                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                }
+                                break;
+                            case "8":
+                                valor();
+                                if (validar(22))
+                                {
+                                    tipo();
+                                    if (validar(11))
+                                    {
+                                        /// se acepta
+                                    }
+                                    else
+                                    {
+                                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                    }
+                                }
+                                else
+                                {
+                                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                }
+                                break;
+                        }
+                        
+                    }
+                    else
+                    {
+                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                    }
+                    break;
+                case "8":
+                    valor();
+                    if (validar(22))
+                    {
+                        switch (obtenerlexema(numLexema + 1).idToken)
+                        {
+                            case "48":
+                                nombre();
+                                if (validar(22))
+                                {
+                                    tipo();
+                                    if (validar(11))
+                                    {
+                                        /// se acepta
+                                    }
+                                    else
+                                    {
+                                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                    }
+                                }
+                                else
+                                {
+                                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                }
+                                break;
+                            case "4":
+                                tipo();
+                                if (validar(22))
+                                {
+                                    nombre();
+                                    if (validar(11))
+                                    {
+                                        /// se acepta
+                                    }
+                                    else
+                                    {
+                                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                    }
+                                }
+                                else
+                                {
+                                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                }
+                                break;
+                        }
+
+                    }
+                    else
+                    {
+                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                    }
+                    break;
+                case "4":
+                    tipo();
+                    if (validar(22))
+                    {
+                        switch (obtenerlexema(numLexema + 1).idToken)
+                        {
+                            case "8":
+                                valor();
+                                if (validar(22))
+                                {
+                                    nombre();
+                                    if (validar(11))
+                                    {
+                                        /// se acepta
+                                    }
+                                    else
+                                    {
+                                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                    }
+                                }
+                                else
+                                {
+                                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                }
+                                break;
+                            case "48":
+                                nombre();
+                                if (validar(22))
+                                {
+                                    valor();
+                                    if (validar(11))
+                                    {
+                                        /// se acepta
+                                    }
+                                    else
+                                    {
+                                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                    }
+                                }
+                                else
+                                {
+                                    escribirEnConsola("Se esperaba ','" + error(numLexema));
+                                }
+                                break;
+                        }
+
+                    }
+                    else
+                    {
+                        escribirEnConsola("Se esperaba ','" + error(numLexema));
+                    }
+                    break;
             }
             
         }
+
+
+
+        public void nombre()
+        {
+            if (validar(48))
+            {
+                if (validar(23))
+                {
+                    if (validar(2))
+                    {
+
+                    }
+                    else
+                    {
+                        escribirEnConsola("Se esperaba secuencia de caracteres" + error(numLexema));
+                    }
+                }
+                else
+                {
+                    escribirEnConsola("Se esperaba '='" + error(numLexema));
+                }
+
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba un 'nombre'" + error(numLexema));
+            }
+        }
+        public void valor()
+        {
+            if (validar(8))
+            {
+                if (validar(23))
+                {
+                    if (validar(2))
+                    {
+
+                    }
+                    else
+                    {
+                        escribirEnConsola("Se esperaba secuencia de caracteres" + error(numLexema));
+                    }
+                }
+                else
+                {
+                    escribirEnConsola("Se esperaba '='" + error(numLexema));
+                }
+
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba un 'valor'" + error(numLexema));
+            }
+        }
+        public void tipo()
+        {
+            if (validar(4))
+            {
+                if (validar(23))
+                {
+                    switch (obtenerlexema(numLexema+1).idToken)
+                    {
+                        case "5":
+                            numLexema++;
+                            break;
+                        case "6":
+                            numLexema++;
+                            break;
+                        case "7":
+                            numLexema++;
+                            break;
+                        default:
+                            escribirEnConsola("Se esperaba 'cadena', 'entero' o 'decimal'" + error(numLexema));
+                            break;
+                    }
+                    
+                }
+                else
+                {
+                    escribirEnConsola("Se esperaba '='" + error(numLexema));
+                }
+
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'tipo'" + error(numLexema));
+            }
+        }
+
+
         // **************************    FUNCIONES   ***********************
 
         //  tamañolienzo
