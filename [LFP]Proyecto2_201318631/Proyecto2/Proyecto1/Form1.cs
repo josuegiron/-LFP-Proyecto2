@@ -686,33 +686,27 @@ namespace Proyecto1
 
 
 
-        int guia;
+        int numLexema = 0;
 
-        private void saltarLinea()
+        private lexema obtenerlexema(int idLexema)
         {
-            
             try
             {
-                lexema simbolo = tablaDeSimbolos.Find(x => x.fila.Equals(tablaDeSimbolos[guia].fila + 1));
-                guia = simbolo.id-1;
-                
-                if (tablaDeSimbolos[guia].idToken == token[24, 0] || tablaDeSimbolos[guia].idToken == token[50, 0])
-                {
-                    guia++;
-                }
-                
+                lexema lexema = tablaDeSimbolos.Find(x => x.id.Equals(idLexema));
+                return lexema;
             }
-            catch { }
+            catch { return null; }
 
         }
 
         private void continuar()
         {
-            guia++;
+            
             try
             {
-                if (tablaDeSimbolos[guia].idToken == token[24, 0] || tablaDeSimbolos[guia].idToken == token[50, 0])
+                if (tablaDeSimbolos[numLexema].idToken == token[24, 0] || tablaDeSimbolos[numLexema].idToken == token[50, 0])
                 {
+                    numLexema++;
                     continuar();
                 }
             }
@@ -720,21 +714,22 @@ namespace Proyecto1
             
         }
 
-        private Boolean validar(int id, int idToken)
+        private Boolean validar(int idToken)
         {
+            continuar();
             try
             {
-                if (tablaDeSimbolos[id].idToken == token[idToken, 0])
+                if (tablaDeSimbolos[numLexema].idToken == token[idToken, 0])
                 {
-                    continuar();
+                    numLexema++;
                     return true;
                 }
                 else
                 {
-                    
-                    
+                    numLexema++;
                     return false;
                 }
+               
             }
             catch { return false; }
         }
@@ -742,156 +737,82 @@ namespace Proyecto1
         // SE INICIA EL ANALIZADO LEXICO
         private void analizarSintaxis(string cadena)
         {
-            guia = 0;
+            numLexema = 0;
             graficador();
         }
 
+        //  GRAFICADOR
         private void graficador()
         {
-            
-            for(int i = 0; i < 7; i++)
+            if (validar(9))
             {
-                
-
-                switch (i)
+                if (validar(10))
                 {
-                    case 0:
-                        if (!validar(guia, 9))
+                    //variablesYConstantes();
+                    //variablesYConstantes()
+                    //variablesYConstantes()
+                    if (validar(11))
+                    {
+                        if (validar(10))
                         {
-                            escribirEnConsola("Se esperaba: 'Inicio Math'");
-                            saltarLinea();
-                            i = 1;
+                            escribirEnConsola("Analisis Sintactico correcto, se compila...'");
                         }
-                        break;
-                    case 1:
-                        if (!validar(guia, 10))
+                        else
                         {
-                            escribirEnConsola("Se esperaba: 'Math'");
-                            saltarLinea();
-                            i = 1;
+                            escribirEnConsola("Se esperaba 'Math'");
                         }
-                        break;
-                    case 2:
-                        variablesYConstantes();
-                        break;
-                    case 3:
-                       
-                        break;
-                    case 4:
-                        //graficas();
-                        break;
-                    case 5:
-                        if (!validar(guia, 11))
-                        {
-                            escribirEnConsola("Se esperaba: 'Fin Math'");
-                            saltarLinea();
-                            i = 6;
-                        }
-                        break;
-                    case 6:
-                        if (!validar(guia, 10))
-                        {
-                            escribirEnConsola("Se esperaba: 'Math'");
-                            saltarLinea();
-                            i = 6;
-                        }
-                        break;
-                }
-                
-            }
 
-            
+                    }
+                    else
+                    {
+                        escribirEnConsola("Se esperaba 'Fin Math'");
+                    }
+                }
+                else
+                {
+                    escribirEnConsola("Se esperaba 'Math'");
+                }
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'Inicio Math'");
+            }
         }
 
         public void variablesYConstantes()
         {
-            for (int i = 0; i < 11; i++)
+            if (validar(9))
             {
-
-
-                switch (i)
+                if (validar(10))
                 {
-                    case 0:
-                        if (!validar(guia, 9))
+                    variablesYConstantes();
+                    //variablesYConstantes()
+                    //variablesYConstantes()
+                    if (validar(11))
+                    {
+                        if (validar(10))
                         {
-                            escribirEnConsola("Se esperaba: 'Inicio Declaracion Constantes y Variables'");
-                            saltarLinea();
-                            i = 4;
+                            escribirEnConsola("Analisis Sintactico correcto, se compila...'");
                         }
-                        break;
-                    case 1:
-                        if (!validar(guia, 12))
+                        else
                         {
-                            escribirEnConsola("Se esperaba: 'Declaracion Constantes y Variables'");
-                            saltarLinea();
-                            i = 4;
+                            escribirEnConsola("Se esperaba 'Math'");
                         }
-                        break;
-                    case 2:
-                        if (!validar(guia, 13))
-                        {
-                            escribirEnConsola("Se esperaba: 'Constantes y Variables'");
-                            saltarLinea();
-                            i = 4;
-                        }
-                        break;
-                    case 3:
-                        if (!validar(guia, 14))
-                        {
-                            escribirEnConsola("Se esperaba: 'y Variables'");
-                            saltarLinea();
-                            i = 4;
-                        }
-                        break;
-                    case 4:
-                        if (!validar(guia, 15))
-                        {
-                            escribirEnConsola("Se esperaba: 'Variables'");
-                            saltarLinea();
-                            i = 4;
-                        }
-                        break;
-                    case 5:
-                      
-                        //variablesYConstantes();
-                        break;
-                    case 6:
-                        if (!validar(guia, 11))
-                        {
-                            escribirEnConsola("Se esperaba: 'Fin'");
-                            saltarLinea();
-                        }
-                        break;
-                    case 7:
-                        if (!validar(guia, 12))
-                        {
-                            escribirEnConsola("Se esperaba: 'Declaracion'");
-                            saltarLinea();
-                        }
-                        break;
-                    case 8:
-                        if (!validar(guia, 13))
-                        {
-                            escribirEnConsola("Se esperaba: 'Constantes'");
-                            saltarLinea();
-                        }
-                        break;
-                    case 9:
-                        if (!validar(guia, 14))
-                        {
-                            escribirEnConsola("Se esperaba: 'y'");
-                            saltarLinea();
-                        }
-                        break;
-                    case 10:
-                        if (!validar(guia, 15))
-                        {
-                            escribirEnConsola("Se esperaba: 'Variables'");
-                            saltarLinea();
-                        }
-                        break;
-                }
 
+                    }
+                    else
+                    {
+                        escribirEnConsola("Se esperaba 'Fin Math'");
+                    }
+                }
+                else
+                {
+                    escribirEnConsola("Se esperaba 'Math'");
+                }
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'Inicio Math'");
             }
         }
 
