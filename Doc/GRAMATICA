@@ -1,12 +1,12 @@
 
 T = { id, numero, '=', ',', , 'nombre', 'tipo', 'cadenas', 'enteros', 'decimales', 'valor', cadena, comentarioLineal, comentarioMultilieal, 'Inicio' 'Math','Fin', 'Declaracion' 'Constantes' 'y' 'Variables', 'Funciones','Generacion' 'graficas', 'constante', 'variable', 'Suma', '(', ')', 
-	'Resta', 'Multiplicacion', 'Division', 'Potencia', 'Raiz', 'Seno', 'Coseno', 'Tangente', 'Funcion', 'grafica', 'x_positivo', 'x_negativo', 'y_positivo', 'y_negativo',
+	'Resta', 'Multiplicar', 'Dividir', 'Potencia', 'RaizCuadrada', 'Seno', 'Coseno', 'Tangente', 'Funcion', 'grafica', 'x_positivo', 'x_negativo', 'y_positivo', 'y_negativo',
 	'ancho', 'largo', 'ruta', 'funcion', '//', '\n', '/*', '*/'
 }
 
 N = { <GRAFICADOR>, <COMENTARIO>, <VARIABLES_Y_CONSTANTES>, <FUNCIONES>, <GRAFICAS>, <COMENTARIO_LINEAL>, <COMENTARIO_MULTILINEA>, <EPSILON>, <FUNCION>, <OTRA_FUNCION>, <GRAFICA>, <OTRA_GRAFICA>, <CUERPO_VARIABLE_Y_CONSTANTE>,
-	<CONSTANTE>, <VARIABLE>, <NOMBRE>, <TIPO>, <VALOR>, <OPERACION>, <SUMA>, <RESTA>, <MULTIPLICACION>, <DIVISION>, <POTENCIA>, <RAIZ>, <SENO>, <COSENO>, <TANGENTE>, <OPERACION_BINARIA>, <OPERACION_UNARIA>,
-	<NOMBRE>, <X_POSITIVO>, <X_NEGATIVO>, <Y_POSITIVO>, <Y_NEGATIVO>, <ANCHO>, <LARGO>, <RUTA>, <NOMBRE_FUNCION>, <CADENA>
+	<CONSTANTE>, <VARIABLE>, <NOMBRE>, <TIPO>, <VALOR>, <OPERACION>, <SUMA>, <RESTA>, <MULTIPLICACION>, <DIVISION>, <POTENCIA>, <RAIZCUADRADA>, <SENO>, <COSENO>, <TANGENTE>, <OPERACION_BINARIA>, <OPERACION_UNARIA>,
+	<NOMBRE>, <X_POSITIVO>, <X_NEGATIVO>, <ATRIBUTOS>, <Y_POSITIVO>, <Y_NEGATIVO>, <ANCHO>, <LARGO>, <RUTA>, <NOMBRE_FUNCION>, <CADENA>
 }
 
 S = <GRAFICADOR>, 
@@ -20,24 +20,25 @@ P = {
 	<FUNCIONES> ::= 'Inicio' 'Declaracion' 'Funciones' <FUNCION> <OTRA_FUNCION> 'Fin' 'Declaracion' 'Funciones'
 	<GRAFICAS> ::= 'Inicio' 'Generacion' 'graficas' <GRAFICA> <OTRA_GRAFICA> 'Fin' 'Generacion' 'graficas'
 	// FUNCIONES DE <VARIABLES_Y__CONSTANTES>
-	<CUERPO_VARIABLE_Y_CONSTANTE> ::= 'Inicio' ('constante'<CONSTANTE> | 'variable' <VARIABLE>) <CUERPO_VARIABLE_Y_CONSTANTE> | <EPSILON>
-	<CONSTANTE> ::=   <NOMBRE> ',' <TIPO> ',' <VALOR> 'Fin' 'constante'
-	<VARIABLE> ::=  <NOMBRE> ',' <TIPO> ',' <VALOR> 'Fin' 'variable'
+	<CUERPO_VARIABLE_Y_CONSTANTE> ::= 'Inicio' ( <CONSTANTE> | <VARIABLE> ) <CUERPO_VARIABLE_Y_CONSTANTE> | <EPSILON>
+	<CONSTANTE> ::= 'constante' <ATRIBUTOS>  'constante'
+	<ATRIBUTOS> ::= <NOMBRE> ',' <TIPO> ',' <VALOR> 'Fin'
+	<VARIABLE> ::= 'variable' <ATRIBUTOS>  'variable'
 	<NOMBRE> ::= 'nombre' = id
-	<TIPO> ::= 'tipo' = 'cadenas' | 'enteros' | 'decimales'
+	<TIPO> ::= 'tipo' = 'cadena' | 'entero' | 'decimal'
 	<VALOR> ::= 'valor' = numero | <OPERACION> | id | cadena
 	<OPERACION> := <SUMA> | <RESTA> | <MULTIPLICACION> | <DIVISION> | <POTENCIA> | <RAIZ> | <SENO> | <COSENO> | <TANGENTE>
-	<SUMA> ::= 'Suma' '('<OPERACION_BINARIA>')'
-	<RESTA> ::= 'Resta' '('<OPERACION_BINARIA>')'
-	<MULTIPLICACION> ::= 'Multiplicacion' '('<OPERACION_BINARIA>')'
-	<DIVISION> ::= 'Division' '('<OPERACION_BINARIA>')'
-	<POTENCIA> ::= 'Potencia' '('<OPERACION_BINARIA>')'
-	<RAIZ> ::= 'Raiz' '(' <OPERACION_UNARIA> ')'
-	<SENO> ::= 'Seno' '(' <OPERACION_UNARIA> ')'
-	<COSENO> ::= 'Coseno' '(' <OPERACION_UNARIA> ')'
-	<TANGENTE> ::= 'Tangente' '('<OPERACION_UNARIA>')'
-	<OPERACION_BINARIA> ::= (<OPERACION> | numero | id) ',' (<OPERACION> | numero | id)
-	<OPERACION_UNARIA> ::= <OPERACION> | numero | id
+	<SUMA> ::= 'Suma' <OPERACION_BINARIA>
+	<RESTA> ::= 'Resta' <OPERACION_BINARIA>
+	<MULTIPLICACION> ::= 'Multiplicar' <OPERACION_BINARIA>
+	<DIVISION> ::= 'Dividir' <OPERACION_BINARIA>
+	<POTENCIA> ::= 'Potencia' <OPERACION_BINARIA>
+	<RAIZCUADRADA> ::= 'RaizCuadrada' <OPERACION_UNARIA> 
+	<SENO> ::= 'Seno' <OPERACION_UNARIA> 
+	<COSENO> ::= 'Coseno' <OPERACION_UNARIA> 
+	<TANGENTE> ::= 'Tangente' <OPERACION_UNARIA>
+	<OPERACION_BINARIA> ::= '(' (<OPERACION> | numero | id) ',' (<OPERACION> | numero | id) ')'
+	<OPERACION_UNARIA> ::= '(' <OPERACION> | numero | id ')'
 	// FUNCIONES DE <FUNCIONES>
 	<FUNCION> ::= 'Inicio' 'Funcion' <COMENTARIO> <NOMBRE> ',' <COMENTARIO> <VALOR> <COMENTARIO> 'Fin' 'Funcion' <COMENTARIO>
 	<OTRA_FUNCION> ::= <FUNCION> <OTRA_FUNCION> | <EPSILON>
