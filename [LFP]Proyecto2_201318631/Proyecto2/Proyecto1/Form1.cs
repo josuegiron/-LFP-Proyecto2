@@ -338,6 +338,7 @@ namespace Proyecto1
                         {
                             lexema += caracterActual;
                             estadoActual = 11;
+                            
                         }
                         else
                         {
@@ -351,7 +352,7 @@ namespace Proyecto1
                         estadoActual = 0;
                         lexema = "";
                         estadoInicial--;
-                        colActual--;
+                        colActual=0;
                         filaActual++;
                         break;
                     case 12:     //  ESTADO 12
@@ -363,6 +364,7 @@ namespace Proyecto1
                                 lexema += cadena[estadoInicial + 1].ToString();
                                 estadoActual = 13;
                                 estadoInicial++;
+                                colActual = 0;
                             }
                             else 
                             {
@@ -395,6 +397,12 @@ namespace Proyecto1
                         {
                             lexema += caracterActual;
                             estadoActual = 15;
+                        }
+                        else if (comparar(SL, caracterActualStr))
+                        {
+                            filaActual++;
+                            lexema += caracterActual;
+                            estadoActual = 14;
                         }
                         else
                         {
@@ -686,21 +694,20 @@ namespace Proyecto1
 
 
 
-        int guia;
-
+        int numLexema = 0;
+        int guia = 0;
+        lexema guia2; 
         private void saltarLinea()
         {
-            
             try
             {
-                lexema simbolo = tablaDeSimbolos.Find(x => x.fila.Equals(tablaDeSimbolos[guia].fila + 1));
+                lexema simbolo = tablaDeSimbolos.Find(x => x.fila.Equals(tablaDeSimbolos[numLexema].fila + 1));
                 guia = simbolo.id-1;
                 
-                if (tablaDeSimbolos[guia].idToken == token[24, 0] || tablaDeSimbolos[guia].idToken == token[50, 0])
+                if (tablaDeSimbolos[numLexema].idToken == token[24, 0] || tablaDeSimbolos[numLexema].idToken == token[50, 0])
                 {
-                    guia++;
+                    numLexema++;
                 }
-                
             }
             catch { }
 
@@ -708,11 +715,12 @@ namespace Proyecto1
 
         private void continuar()
         {
-            guia++;
+            
             try
             {
-                if (tablaDeSimbolos[guia].idToken == token[24, 0] || tablaDeSimbolos[guia].idToken == token[50, 0])
+                if (tablaDeSimbolos[numLexema].idToken == token[24, 0] || tablaDeSimbolos[numLexema].idToken == token[50, 0])
                 {
+                    numLexema++;
                     continuar();
                 }
             }
@@ -722,17 +730,15 @@ namespace Proyecto1
 
         private Boolean validar(int id, int idToken)
         {
+            continuar();
             try
             {
-                if (tablaDeSimbolos[id].idToken == token[idToken, 0])
+                if (tablaDeSimbolos[numLexema].idToken == token[idToken, 0])
                 {
-                    continuar();
                     return true;
                 }
                 else
                 {
-                    
-                    
                     return false;
                 }
             }
@@ -742,58 +748,84 @@ namespace Proyecto1
         // SE INICIA EL ANALIZADO LEXICO
         private void analizarSintaxis(string cadena)
         {
-            guia = 0;
+            guia2 = tablaDeSimbolos.Find(x => x.idToken.Equals(1));
+
+            numLexema = 0;
             graficador();
         }
 
         private void graficador()
         {
-            
-            for(int i = 0; i < 7; i++)
-            {
-                
+            int estadoActual = 0;
+            string tokenactual;
+            string tokenVariable = "";
+            string tokenAuxiliar = "";
+            string expresion = "";
+            string comando = " ";
+            string tId = "";
+            string x = "", y = "";
 
-                switch (i)
+            for (numLexema = 0; numLexema < tablaDeSimbolos.Count; numLexema++)
+            {
+                tokenactual = tablaDeSimbolos[numLexema].nombre;
+                tId = tablaDeSimbolos[numLexema].idToken;
+
+                switch (estadoActual)
                 {
                     case 0:
-                        if (!validar(guia, 9))
+                        if (validar(numLexema, 9))
                         {
-                            escribirEnConsola("Se esperaba: 'Inicio Math'");
-                            saltarLinea();
-                            i = 1;
+                            estadoActual = 1;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'Inicio Math'" + error(numLexema));
+                            estadoActual = -1;
                         }
                         break;
                     case 1:
-                        if (!validar(guia, 10))
+                        if (validar(numLexema, 10))
                         {
-                            escribirEnConsola("Se esperaba: 'Math'");
-                            saltarLinea();
-                            i = 1;
+                            estadoActual = 2;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'Math'" + error(numLexema));
+                            estadoActual = -1;
                         }
                         break;
                     case 2:
                         variablesYConstantes();
+                        estadoActual = 3;
                         break;
                     case 3:
-                       
+                        //graficas();
+                        estadoActual = 4;
                         break;
                     case 4:
                         //graficas();
+                        estadoActual = 5;
                         break;
                     case 5:
-                        if (!validar(guia, 11))
+                        if (validar(numLexema, 11))
                         {
-                            escribirEnConsola("Se esperaba: 'Fin Math'");
-                            saltarLinea();
-                            i = 6;
+                            estadoActual = 6;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'Fin Math'" + error(numLexema));
+                            estadoActual = -1;
                         }
                         break;
                     case 6:
-                        if (!validar(guia, 10))
+                        if (validar(numLexema, 10))
                         {
-                            escribirEnConsola("Se esperaba: 'Math'");
-                            saltarLinea();
-                            i = 6;
+                            estadoActual = 7;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'Math'" + error(numLexema));
+                            estadoActual = -1;
                         }
                         break;
                 }
@@ -803,96 +835,167 @@ namespace Proyecto1
             
         }
 
+        public string error(int id)
+        {
+            lexema lexema = tablaDeSimbolos.Find(x => x.id.Equals(id+1));
+            return " en [" + lexema.fila + ", " + lexema.columna + "]";
+        }
         public void variablesYConstantes()
         {
-            for (int i = 0; i < 11; i++)
+            int estadoActual = 0;
+            int i = numLexema + 6;
+            for (; numLexema < i; numLexema++)
             {
-
-
-                switch (i)
+                switch (estadoActual)
                 {
                     case 0:
-                        if (!validar(guia, 9))
+                        if (validar(numLexema, 9))
                         {
-                            escribirEnConsola("Se esperaba: 'Inicio Declaracion Constantes y Variables'");
-                            saltarLinea();
-                            i = 4;
+                            estadoActual = 1;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'Inicio Declaracion Constantes y Variables'"+ error(numLexema));
+                            estadoActual = -1;
                         }
                         break;
                     case 1:
-                        if (!validar(guia, 12))
+                        if (validar(numLexema, 12))
                         {
-                            escribirEnConsola("Se esperaba: 'Declaracion Constantes y Variables'");
-                            saltarLinea();
-                            i = 4;
+                            estadoActual = 2;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'Declaracion Constantes y Variables'" + error(numLexema));
+                            estadoActual = -1;
                         }
                         break;
                     case 2:
-                        if (!validar(guia, 13))
+                        if (validar(numLexema, 13))
                         {
-                            escribirEnConsola("Se esperaba: 'Constantes y Variables'");
-                            saltarLinea();
-                            i = 4;
+                            estadoActual = 3;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'Constantes y Variables'" + error(numLexema));
+                            estadoActual = -1;
                         }
                         break;
                     case 3:
-                        if (!validar(guia, 14))
+                        if (validar(numLexema, 14))
                         {
-                            escribirEnConsola("Se esperaba: 'y Variables'");
-                            saltarLinea();
-                            i = 4;
+                            estadoActual = 4;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'y Variables'" + error(numLexema));
+                            estadoActual = -1;
                         }
                         break;
                     case 4:
-                        if (!validar(guia, 15))
+                        if (validar(numLexema, 15))
                         {
-                            escribirEnConsola("Se esperaba: 'Variables'");
-                            saltarLinea();
-                            i = 4;
+                            estadoActual = 5;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'Variables'" + error(numLexema));
+                            estadoActual = -1;
                         }
                         break;
-                    case 5:
-                      
-                        //variablesYConstantes();
-                        break;
+                }
+            }
+                    
+            //cuerpoVariablesYConstantes();
+            estadoActual = 6;
+
+            i = numLexema + 5;
+            for (; numLexema < i; numLexema++)
+            {
+                switch (estadoActual)
+                {
                     case 6:
-                        if (!validar(guia, 11))
+                        if (validar(numLexema, 11))
                         {
-                            escribirEnConsola("Se esperaba: 'Fin'");
-                            saltarLinea();
+                            estadoActual = 7;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'Fin Declaracion Constantes y Variables'" + error(numLexema));
+                            estadoActual = -1;
                         }
                         break;
                     case 7:
-                        if (!validar(guia, 12))
+                        if (validar(numLexema, 12))
                         {
-                            escribirEnConsola("Se esperaba: 'Declaracion'");
-                            saltarLinea();
+                            estadoActual = 8;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'Declaracion Constantes y Variables'" + error(numLexema));
+                            estadoActual = -1;
                         }
                         break;
                     case 8:
-                        if (!validar(guia, 13))
+                        if (validar(numLexema, 13))
                         {
-                            escribirEnConsola("Se esperaba: 'Constantes'");
-                            saltarLinea();
+                            estadoActual = 9;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'Constantes y Variables'" + error(numLexema));
+                            estadoActual = -1;
                         }
                         break;
                     case 9:
-                        if (!validar(guia, 14))
+                        if (validar(numLexema, 14))
                         {
-                            escribirEnConsola("Se esperaba: 'y'");
-                            saltarLinea();
+                            estadoActual = 10;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'y Variables'" + error(numLexema));
+                            estadoActual = -1;
                         }
                         break;
                     case 10:
-                        if (!validar(guia, 15))
+                        if (validar(numLexema, 15))
                         {
-                            escribirEnConsola("Se esperaba: 'Variables'");
-                            saltarLinea();
+                            estadoActual = 11;
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba: 'Variables'" + error(numLexema));
                         }
                         break;
                 }
 
             }
+        }
+
+        
+        public void cuerpoVariablesYConstantes()
+        {
+            if (validar(guia, 9))
+            {
+                if (validar(guia, 18))
+                {
+
+                }
+                else if (validar(guia, 18))
+                {
+
+                }
+                else
+                {
+                    escribirEnConsola("Se esperaba: 'Constante o Variable'");
+                }
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba: 'Inicio Constante o Inicio Variable'");
+            }
+            
         }
 
         // **************************    FUNCIONES   ***********************
