@@ -959,7 +959,7 @@ namespace Proyecto1
                     }
                     else
                     {
-                        escribirEnConsola("Una o mas variables o constantes no han sido declaradas...");
+                        escribirEnConsola("Una o mas variables o constantes no han sido declaradas..." + nomVarC);
                     }
                     
                 }
@@ -989,7 +989,7 @@ namespace Proyecto1
                     }
                     else
                     {
-                        escribirEnConsola("Una o mas variables o constantes no han sido declaradas...");
+                        escribirEnConsola("Una o mas variables o constantes no han sido declaradas..." + nomVarC);
                     }
                 }
                 else
@@ -1217,7 +1217,7 @@ namespace Proyecto1
                             numLexema++;
                             break;
                         default:
-                            operacion();
+                            valVarC = operacion();
                             break;
                     }
                 }
@@ -1270,164 +1270,198 @@ namespace Proyecto1
             }
         }
 
-        public void operacion()
+        public string operacion()
         {
+            string valor = "";
             switch (obtenerlexema(numLexema + 1).idToken)
             {
                 case "26":
-                    suma();
+                    valor = suma();
                     break;
                 case "27":
-                   resta();
+                    valor = resta();
                     break;
                 case "28":
-                    multiplicacion();
+                    valor = multiplicacion();
                     break;
                 case "29":
-                    division();
+                    valor = division();
                     break;
                 case "30":
-                    potencia();
+                    valor = potencia();
                     break;
                 case "31":
-                    raizCuadrada();
+                    valor = raizCuadrada();
                     break;
                 case "32":
-                    seno();
+                    valor = seno();
                     break;
                 case "33":
-                    coseno();
+                    valor = coseno();
                     break;
                 case "34":
-                    tangente();
+                    valor = tangente();
                     break;
                 default:
                     escribirEnConsola("Se esperaba numero, Id, cadena de caracteres o una operacion" + error(numLexema));
                     break;
             }
+            return valor;
         }
 
-        public void suma()
+        public string suma()
         {
+            double total = 0;
             if (validar(26))
             {
-                operacionBinaria();
+                string[,] valor = operacionBinaria();
+                total = Convert.ToDouble(valor[0, 0]) + Convert.ToDouble(valor[0, 1]);
             }
             else
             {
                 escribirEnConsola("Se esperaba 'Suma'" + error(numLexema));
             }
+            return "" + total;
         }
-        public void resta()
+        public string resta()
         {
+            double total = 0;
             if (validar(27))
             {
-                operacionBinaria();
+                string[,] valor = operacionBinaria();
+                total = Convert.ToDouble(valor[0, 0]) - Convert.ToDouble(valor[0, 1]);
             }
             else
             {
                 escribirEnConsola("Se esperaba 'Resta'" + error(numLexema));
             }
+            return "" + total;
         }
 
-        public void multiplicacion()
+        public string multiplicacion()
         {
+            double total = 0;
             if (validar(28))
             {
-                operacionBinaria();
+                string[,] valor = operacionBinaria();
+                total = Convert.ToDouble(valor[0, 0]) * Convert.ToDouble(valor[0, 1]);
             }
             else
             {
                 escribirEnConsola("Se esperaba 'Multiplicar'" + error(numLexema));
             }
+            return "" + total;
         }
 
-        public void division()
+        public string division()
         {
+            double total = 0;
             if (validar(29))
             {
-                operacionBinaria();
+                string[,] valor = operacionBinaria();
+                total = Convert.ToDouble(valor[0, 0]) / Convert.ToDouble(valor[0, 1]);
             }
             else
             {
                 escribirEnConsola("Se esperaba 'Dividir'" + error(numLexema));
             }
+            return "" + total;
         }
 
-        public void potencia()
+        public string potencia()
         {
+            double total = 0;
             if (validar(30))
             {
-                operacionBinaria();
+                string[,] valor = operacionBinaria();
+                total = System.Math.Pow(Convert.ToDouble(valor[0, 0]),  Convert.ToDouble(valor[0, 1]));
             }
             else
             {
                 escribirEnConsola("Se esperaba 'Potencia'" + error(numLexema));
             }
+            return "" + total;
         }
 
-        public void raizCuadrada()
+        public string raizCuadrada()
         {
+            double total = 0;
             if (validar(31))
             {
-                operacionUnaria();
+                string valor = operacionUnaria();
+                total = System.Math.Sqrt(Convert.ToDouble(valor));
             }
             else
             {
                 escribirEnConsola("Se esperaba 'RaizCuadrada'" + error(numLexema));
             }
+            return "" + total;
         }
 
-        public void seno()
+        public string seno()
         {
+            double total = 0;
             if (validar(32))
             {
-                operacionUnaria();
+                string valor = operacionUnaria();
+                total = System.Math.Sin(Convert.ToDouble(valor));
             }
             else
             {
                 escribirEnConsola("Se esperaba 'Seno'" + error(numLexema));
             }
+            return "" + total;
         }
 
-        public void coseno()
+        public string coseno()
         {
+            double total = 0;
             if (validar(33))
             {
-                operacionUnaria();
+                string valor = operacionUnaria();
+                total = System.Math.Cos(Convert.ToDouble(valor));
             }
             else
             {
                 escribirEnConsola("Se esperaba 'Coseno'" + error(numLexema));
             }
+            return "" + total;
         }
 
-        public void tangente()
+        public string tangente()
         {
+            double total = 0;
             if (validar(34))
             {
-                operacionUnaria();
+                string valor = operacionUnaria();
+                total = System.Math.Tan(Convert.ToDouble(valor));
             }
             else
             {
                 escribirEnConsola("Se esperaba 'Tangente'" + error(numLexema));
             }
+            return "" + total;
         }
 
-        public void operacionBinaria()
+        public string [,] operacionBinaria()
         {
+            string[,] valores = new string[,] { { "", "" }, } ;
             if (validar(20))
             {
                 switch (obtenerlexema(numLexema + 1).idToken)
                 {
                     case "1":
+                        valores[0, 0] = obtenerlexema(numLexema + 1).nombre;
                         numLexema++;
                         break;
                     case "2":
+                        valores[0, 0] = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
+                        if (valores[0, 0] == "")
+                            valores[0, 0] = obtenerConstante(obtenerlexema(numLexema + 1).nombre);
                         numLexema++;
                         break;
                     default:
-                        operacion();
+                        valores[0, 0] = operacion();
                         break;
                 }
 
@@ -1439,13 +1473,17 @@ namespace Proyecto1
                 switch (obtenerlexema(numLexema + 1).idToken)
                 {
                     case "1":
+                        valores[0, 1] = obtenerlexema(numLexema + 1).nombre;
                         numLexema++;
                         break;
                     case "2":
+                        valores[0, 1] = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
+                        if(valores[0, 1]=="")
+                        valores[0, 1] = obtenerConstante(obtenerlexema(numLexema + 1).nombre);
                         numLexema++;
                         break;
                     default:
-                        operacion();
+                        valores[0, 1] = operacion();
                         break;
                 }
                 if (!validar(21))
@@ -1457,22 +1495,34 @@ namespace Proyecto1
             {
                 escribirEnConsola("Se esperaba '('" + error(numLexema));
             }
+            if (valores[0, 0] == "")
+            {
+                valores[0, 0] = "0";
+            }
+            if (valores[0, 1] == "")
+            {
+                valores[0, 1] = "0";
+            }
+            return valores;
         }
 
-        public void operacionUnaria()
+        public string operacionUnaria()
         {
+            string valor = "";
             if (validar(20))
             {
                 switch (obtenerlexema(numLexema + 1).idToken)
                 {
                     case "1":
+                        valor = obtenerlexema(numLexema + 1).nombre;
                         numLexema++;
                         break;
                     case "2":
+                        valor = obtenerlexema(numLexema + 1).nombre;
                         numLexema++;
                         break;
                     default:
-                        operacion();
+                        valor = operacion();
                         break;
                 }
                 if (!validar(21))
@@ -1484,6 +1534,7 @@ namespace Proyecto1
             {
                 escribirEnConsola("Se esperaba '('" + error(numLexema));
             }
+            return valor;
         }
 
         // **************************    FUNCIONES   ***********************
