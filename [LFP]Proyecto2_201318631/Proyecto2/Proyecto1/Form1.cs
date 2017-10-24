@@ -351,7 +351,7 @@ namespace Proyecto1
                         estadoActual = 0;
                         lexema = "";
                         estadoInicial--;
-                        colActual--;
+                        colActual = 0;
                         filaActual++;
                         break;
                     case 12:     //  ESTADO 12
@@ -375,6 +375,7 @@ namespace Proyecto1
                             lexema += caracterActual;
                             estadoActual = 12;
                             filaActual++;
+                            colActual = 0;
                         }
                         else
                         {
@@ -699,6 +700,16 @@ namespace Proyecto1
 
         }
 
+        public string error(int idLexema)
+        {
+            try
+            {
+                lexema lexema = tablaDeSimbolos.Find(x => x.id.Equals(idLexema));
+                return " Error en: [ Fila: " + lexema.fila + " - Columna: " + lexema.columna + " ]";
+            }
+            catch { return null; }
+        }
+
         private void continuar()
         {
             
@@ -748,43 +759,6 @@ namespace Proyecto1
             {
                 if (validar(10))
                 {
-                    //variablesYConstantes();
-                    //variablesYConstantes()
-                    //variablesYConstantes()
-                    if (validar(11))
-                    {
-                        if (validar(10))
-                        {
-                            escribirEnConsola("Analisis Sintactico correcto, se compila...'");
-                        }
-                        else
-                        {
-                            escribirEnConsola("Se esperaba 'Math'");
-                        }
-
-                    }
-                    else
-                    {
-                        escribirEnConsola("Se esperaba 'Fin Math'");
-                    }
-                }
-                else
-                {
-                    escribirEnConsola("Se esperaba 'Math'");
-                }
-            }
-            else
-            {
-                escribirEnConsola("Se esperaba 'Inicio Math'");
-            }
-        }
-
-        public void variablesYConstantes()
-        {
-            if (validar(9))
-            {
-                if (validar(10))
-                {
                     variablesYConstantes();
                     //variablesYConstantes()
                     //variablesYConstantes()
@@ -796,26 +770,116 @@ namespace Proyecto1
                         }
                         else
                         {
-                            escribirEnConsola("Se esperaba 'Math'");
+                            escribirEnConsola("Se esperaba 'Math'" + error(numLexema));
                         }
 
                     }
                     else
                     {
-                        escribirEnConsola("Se esperaba 'Fin Math'");
+                        escribirEnConsola("Se esperaba 'Fin Math'" + error(numLexema));
                     }
                 }
                 else
                 {
-                    escribirEnConsola("Se esperaba 'Math'");
+                    escribirEnConsola("Se esperaba 'Math'" + error(numLexema));
                 }
             }
             else
             {
-                escribirEnConsola("Se esperaba 'Inicio Math'");
+                escribirEnConsola("Se esperaba 'Inicio Math'" + error(numLexema));
             }
         }
 
+        public void variablesYConstantes()
+        {
+            if (validar(9))
+            {
+                if (validar(12))
+                {
+                    if (validar(13))
+                    {
+                        if (validar(14))
+                        {
+                            if (validar(15))
+                            {
+                                cuerpoConstantesYVariables();
+                                if (validar(11))
+                                {
+                                    if (validar(12))
+                                    {
+                                        if (validar(13))
+                                        {
+                                            if (validar(14))
+                                            {
+                                                if (validar(15))
+                                                {
+
+                                                }
+                                                else
+                                                {
+                                                    escribirEnConsola("Se esperaba 'Variables'" + error(numLexema));
+                                                }
+                                            }
+                                            else
+                                            {
+                                                escribirEnConsola("Se esperaba 'y Variables'" + error(numLexema));
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            escribirEnConsola("Se esperaba 'Constantes y Variables'" + error(numLexema));
+                                        }
+                                    }
+                                    else
+                                    {
+                                        escribirEnConsola("Se esperaba 'Declaracion Constantes y Variables'" + error(numLexema));
+                                    }
+                                }
+                                else
+                                {
+                                    escribirEnConsola("Se esperaba 'Fin Declaracion Constantes y Variables'" + error(numLexema));
+                                }
+                            }
+                            else
+                            {
+                                escribirEnConsola("Se esperaba 'Variables'" + error(numLexema));
+                            }
+                        }
+                        else
+                        {
+                            escribirEnConsola("Se esperaba 'y Variables'" + error(numLexema));
+                        }
+
+                    }
+                    else
+                    {
+                        escribirEnConsola("Se esperaba 'Constantes y Variables'" + error(numLexema));
+                    }
+                }
+                else
+                {
+                    escribirEnConsola("Se esperaba 'Declaracion Constantes y Variables'" + error(numLexema));
+                }
+            }
+            else
+            {
+                escribirEnConsola("Se esperaba 'Inicio Declaracion Constantes y Variables'" + error(numLexema));
+            }
+        }
+
+
+        public void cuerpoConstantesYVariables()
+        {
+            if (validar(0))
+            {
+                switch(numLexema){
+                case :
+                    
+            }
+            }
+            
+        }
         // **************************    FUNCIONES   ***********************
 
         //  tamañolienzo
