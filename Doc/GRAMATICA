@@ -4,7 +4,7 @@ T = { id, numero, '=', ',', , 'nombre', 'tipo', 'cadenas', 'enteros', 'decimales
 	'ancho', 'largo', 'ruta', 'funcion', '//', '\n', '/*', '*/'
 }
 
-N = { <GRAFICADOR>, <COMENTARIO>, <VARIABLES_Y_CONSONANTES>, <FUNCIONES>, <GRAFICAS>, <COMENTARIO_LINEAL>, <COMENTARIO_MULTILINEA>, <EPSILON>, <FUNCION>, <OTRA_FUNCION>, <GRAFICA>, <OTRA_GRAFICA>, <CUERPO_VARIABLE_Y_CONSTANTE>,
+N = { <GRAFICADOR>, <COMENTARIO>, <VARIABLES_Y_CONSTANTES>, <FUNCIONES>, <GRAFICAS>, <COMENTARIO_LINEAL>, <COMENTARIO_MULTILINEA>, <EPSILON>, <FUNCION>, <OTRA_FUNCION>, <GRAFICA>, <OTRA_GRAFICA>, <CUERPO_VARIABLE_Y_CONSTANTE>,
 	<CONSTANTE>, <VARIABLE>, <NOMBRE>, <TIPO>, <VALOR>, <OPERACION>, <SUMA>, <RESTA>, <MULTIPLICACION>, <DIVISION>, <POTENCIA>, <RAIZ>, <SENO>, <COSENO>, <TANGENTE>, <OPERACION_BINARIA>, <OPERACION_UNARIA>,
 	<NOMBRE>, <X_POSITIVO>, <X_NEGATIVO>, <Y_POSITIVO>, <Y_NEGATIVO>, <ANCHO>, <LARGO>, <RUTA>, <NOMBRE_FUNCION>, <CADENA>
 }
@@ -12,16 +12,17 @@ N = { <GRAFICADOR>, <COMENTARIO>, <VARIABLES_Y_CONSONANTES>, <FUNCIONES>, <GRAFI
 S = <GRAFICADOR>, 
 
 P = {
-	<GRAFICADOR> ::= 'Inicio' 'Math' <COMENTARIO> <VARIABLES_Y_CONSONANTES> <COMENTARIO> <FUNCIONES> <GRAFICAS>  <COMENTARIO> 'Fin' 'Math'<COMENTARIO>
+	<GRAFICADOR> ::= 'Inicio' 'Math' '\n' <VARIABLES_Y_CONSTANTES> <FUNCIONES> <GRAFICAS> 'Fin' 'Math' 
+
 	<COMENTARIO> ::= <COMENTARIO_LINEAL> | <COMENTARIO_MULTILINEA> | <EPSILON>
 
-	<VARIABLES_Y_CONSONANTES> ::=  'Inicio' 'Declaracion' 'Constantes' 'y' 'Variables' <VARIABLES_Y_CONSTANTES> 'Fin' 'Declaracion' 'Constantes' 'y' 'Variables'
+	<VARIABLES_Y_CONSTANTES> ::=  'Inicio' 'Declaracion' 'Constantes' 'y' 'Variables' '\n' <CUERPO_VARIABLE_Y_CONSTANTE> 'Fin' 'Declaracion' 'Constantes' 'y' 'Variables' 
 	<FUNCIONES> ::= 'Inicio' 'Declaracion' 'Funciones' <FUNCION> <OTRA_FUNCION> 'Fin' 'Declaracion' 'Funciones'
 	<GRAFICAS> ::= 'Inicio' 'Generacion' 'graficas' <GRAFICA> <OTRA_GRAFICA> 'Fin' 'Generacion' 'graficas'
 	// FUNCIONES DE <VARIABLES_Y__CONSTANTES>
-	<CUERPO_VARIABLE_Y_CONSTANTE> ::= (<CONSTANTE> | <VARIABLE>) <CUERPO_VARIABLE_Y_CONSTANTE> | <EPSILON>
-	<CONSTANTE> ::= 'Inicio' 'constante' <NOMBRE> ',' <COMENTARIO> <TIPO> ',' <COMENTARIO> <VALOR> 'Fin' 'constante'
-	<VARIABLE> ::= 'Inicio' 'variable' <NOMBRE> ',' <TIPO> ',' <VALOR> 'Fin' 'variable'
+	<CUERPO_VARIABLE_Y_CONSTANTE> ::= 'Inicio' ('constante'<CONSTANTE> | 'variable' <VARIABLE>) <CUERPO_VARIABLE_Y_CONSTANTE> | <EPSILON>
+	<CONSTANTE> ::=   <NOMBRE> ',' <TIPO> ',' <VALOR> 'Fin' 'constante'
+	<VARIABLE> ::=  <NOMBRE> ',' <TIPO> ',' <VALOR> 'Fin' 'variable'
 	<NOMBRE> ::= 'nombre' = id
 	<TIPO> ::= 'tipo' = 'cadenas' | 'enteros' | 'decimales'
 	<VALOR> ::= 'valor' = numero | <OPERACION> | id | cadena
