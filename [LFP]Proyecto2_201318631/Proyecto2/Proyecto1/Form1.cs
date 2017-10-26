@@ -1353,13 +1353,18 @@ namespace Proyecto1
             return "" + total;
         }
 
+    
         public string division()
         {
             double total = 0;
             if (validar(29))
             {
                 string[,] valor = operacionBinaria();
-                total = Convert.ToDouble(valor[0, 0]) / Convert.ToDouble(valor[0, 1]);
+                try
+                {
+                    total = Convert.ToDouble(valor[0, 0]) / Convert.ToDouble(valor[0, 1]);
+                }
+                catch { escribirEnConsola("No se puede valuar la funcion."); }
             }
             else
             {
@@ -1404,7 +1409,11 @@ namespace Proyecto1
             if (validar(32))
             {
                 string valor = operacionUnaria();
-                total = System.Math.Sin(Convert.ToDouble(valor));
+                try
+                {
+                    total = System.Math.Sin(Convert.ToDouble(valor));
+                }
+                catch { escribirEnConsola("No se puede valuar la funcion."); }
             }
             else
             {
@@ -1419,7 +1428,11 @@ namespace Proyecto1
             if (validar(33))
             {
                 string valor = operacionUnaria();
-                total = System.Math.Cos(Convert.ToDouble(valor));
+                try
+                {
+                    total = System.Math.Cos(Convert.ToDouble(valor));
+                }
+                catch { escribirEnConsola("No se puede valuar la funcion."); }
             }
             else
             {
@@ -1434,7 +1447,11 @@ namespace Proyecto1
             if (validar(34))
             {
                 string valor = operacionUnaria();
-                total = System.Math.Tan(Convert.ToDouble(valor));
+                try
+                {
+                    total = System.Math.Tan(Convert.ToDouble(valor));
+                }
+                catch { escribirEnConsola("No se puede valuar la funcion."); }
             }
             else
             {
@@ -1448,44 +1465,15 @@ namespace Proyecto1
             string[,] valores = new string[,] { { "", "" }, } ;
             if (validar(20))
             {
-                switch (obtenerlexema(numLexema + 1).idToken)
-                {
-                    case "1":
-                        valores[0, 0] = obtenerlexema(numLexema + 1).nombre;
-                        numLexema++;
-                        break;
-                    case "2":
-                        valores[0, 0] = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
-                        if (valores[0, 0] == "")
-                            valores[0, 0] = obtenerConstante(obtenerlexema(numLexema + 1).nombre);
-                        numLexema++;
-                        break;
-                    default:
-                        valores[0, 0] = operacion();
-                        break;
-                }
+                valores[0, 0] = argumento();
 
                 if (!validar(22))
                 {
                     escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                 }
 
-                switch (obtenerlexema(numLexema + 1).idToken)
-                {
-                    case "1":
-                        valores[0, 1] = obtenerlexema(numLexema + 1).nombre;
-                        numLexema++;
-                        break;
-                    case "2":
-                        valores[0, 1] = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
-                        if(valores[0, 1]=="")
-                        valores[0, 1] = obtenerConstante(obtenerlexema(numLexema + 1).nombre);
-                        numLexema++;
-                        break;
-                    default:
-                        valores[0, 1] = operacion();
-                        break;
-                }
+                valores[0, 1] = argumento();
+                
                 if (!validar(21))
                 {
                     escribirEnConsola("- ERROR SINTACTICO: Se esperaba ')'" + error(numLexema));
@@ -1511,20 +1499,7 @@ namespace Proyecto1
             string valor = "";
             if (validar(20))
             {
-                switch (obtenerlexema(numLexema + 1).idToken)
-                {
-                    case "1":
-                        valor = obtenerlexema(numLexema + 1).nombre;
-                        numLexema++;
-                        break;
-                    case "2":
-                        valor = obtenerlexema(numLexema + 1).nombre;
-                        numLexema++;
-                        break;
-                    default:
-                        valor = operacion();
-                        break;
-                }
+                valor = argumento();
                 if (!validar(21))
                 {
                     escribirEnConsola("- ERROR SINTACTICO: Se esperaba ')'" + error(numLexema));
@@ -1534,12 +1509,40 @@ namespace Proyecto1
             {
                 escribirEnConsola("- ERROR SINTACTICO: Se esperaba '('" + error(numLexema));
             }
+            
+            if (valor == "")
+            {
+                valor = "0";
+            }
             return valor;
         }
 
+        public string argumento()
+        {
+            string valor = "";
+            switch (obtenerlexema(numLexema + 1).idToken)
+            {
+                case "1":
+                    valor = obtenerlexema(numLexema + 1).nombre;
+                    numLexema++;
+                    break;
+                case "2":
+                    valor = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
+                    if (valor == "")
+                        valor = obtenerConstante(obtenerlexema(numLexema + 1).nombre);
+                    numLexema++;
+                    break;
+                default:
+                    valor = operacion();
+                    break;
+            }
+            return valor;
+        }
+
+
         // **************************    FUNCIONES   ***********************
 
-            //  tamañolienzo
+        //  tamañolienzo
 
         private void tamaniolienzo(int x, int y)
         {
