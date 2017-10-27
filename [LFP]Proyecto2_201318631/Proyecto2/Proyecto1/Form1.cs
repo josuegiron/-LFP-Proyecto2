@@ -583,6 +583,42 @@ namespace Proyecto1
         List<variable> tablaConstantes = new List<variable>();
         List<lexema> tablaDeSimbolos = new List<lexema>();
         List<error> tablaDeErrores = new List<error>();
+        List<termino> expresion = new List<termino>();
+        List<funcion> tablaDeFuncioes = new List<funcion>();
+
+        private void agregarTermino(string idToken, string termino)
+        {
+            expresion.Add(new termino() { idToken = idToken, nomTermino = termino });
+        }
+
+        private void agregarFuncion(string nombre, List<termino> expresion)
+        {
+            funcion funcion = tablaDeFuncioes.Find(x => x.nombre.Contains(nombre));
+
+            if (funcion == null)
+            {
+                tablaDeFuncioes.Add(new funcion() { nombre = nombre, expresion = expresion});
+                escribirEnConsola("Se almacena la funcion: { id: " + nombre +" }");
+            }
+            else
+            {
+                escribirEnConsola("El nombre de la funcion ya ha sido utilizado: " + nombre);
+            }
+        }
+
+        private termino obtenerTermino(string idToken)
+        {
+            termino termino = expresion.Find(x => x.idToken.Equals(idToken));
+            if (termino == null)
+            {
+                return null;
+            }
+            else
+            {
+                return termino;
+            }
+        }
+
         int num = 1;
         int numError = 1;
 
@@ -591,6 +627,7 @@ namespace Proyecto1
             tablaDeSimbolos.Add(new lexema() { id = num, idToken = idToken, nombre = lexema, fila = fila, columna = columna, token = token});
             num++;
         }
+
         private void agregarError(string caracter, int fila, int columna)
         {
             tablaDeErrores.Add(new error() { id = numError, caracter = caracter, fila = fila, columna = columna });
@@ -605,7 +642,7 @@ namespace Proyecto1
             if (var==null && cons == null)
             {
                 tablaVariables.Add(new variable() { id = num, nombre = nombre, valor = valor, tipo = tipo  });
-                escribirEnConsola("Variable: {id: " + nomVarC + ", tipo: " + tipoVarC + ", valor: " + valVarC + "}");
+                escribirEnConsola("Se agrega la variable: { id: " + nomVarC + ", tipo: " + tipoVarC + ", valor: " + valVarC + " }");
             }
             else
             {
@@ -631,7 +668,6 @@ namespace Proyecto1
 
         }
 
-
         private void agregarConstante(string nombre, string valor, string tipo)
         {
             variable var = tablaVariables.Find(x => x.nombre.Contains(nombre));
@@ -640,7 +676,7 @@ namespace Proyecto1
             if (var == null && cons == null)
             {
                 tablaConstantes.Add(new variable() { id = num, nombre = nombre, valor = valor, tipo = tipo });
-                escribirEnConsola("Constante: {id: " + nomVarC + ", tipo: " + tipoVarC + ", valor: " + valVarC + "}");
+                escribirEnConsola("Se agrega la constante: { id: " + nomVarC + ", tipo: " + tipoVarC + ", valor: " + valVarC + " }");
             }
             else
             {
@@ -685,6 +721,7 @@ namespace Proyecto1
             }
             else if(tipo == "reservado")   //   Si vienen ID o simbolos:
             {
+
                 lexema = lexema.Replace(" ", "");
                 for (int i = 0; i < palabrasReservadas.GetLength(0); i++)
                 {
@@ -721,17 +758,13 @@ namespace Proyecto1
             return "ERROR INESPERADO...";
         }
 
-
-
-
         // **************************    ANALIZADOR SINTACTICO   ***********************
-
-
 
         int numLexema = 0;
         string nomVarC = "";
         string tipoVarC = "";
         string valVarC = "";
+        //string expresion = "";
 
         private lexema obtenerlexema(int idLexema)
         {
@@ -808,8 +841,8 @@ namespace Proyecto1
                 if (validar(10))
                 {
                     variablesYConstantes();
-                    //variablesYConstantes()
-                    //variablesYConstantes()
+                    funciones();
+                    //graficas();
                     if (validar(11))
                     {
                         if (validar(10))
@@ -916,7 +949,6 @@ namespace Proyecto1
             }
         }
 
-
         public void cuerpoConstantesYVariables()
         {
             if (validar(9))
@@ -985,7 +1017,6 @@ namespace Proyecto1
                     if (valVarC != "")
                     {
                         agregarVariable(nomVarC, valVarC, tipoVarC);
-                        
                     }
                     else
                     {
@@ -1167,8 +1198,6 @@ namespace Proyecto1
             
         }
 
-
-
         public void nombre()
         {
             if (validar(48))
@@ -1177,7 +1206,15 @@ namespace Proyecto1
                 {
                     if (validar(2))
                     {
-                        nomVarC = obtenerlexema(numLexema).nombre;
+                        if (obtenerlexema(numLexema).idToken == "50" | obtenerlexema(numLexema).idToken == "24")
+                        {
+                            nomVarC = obtenerlexema(numLexema-1).nombre;
+                        }
+                        else
+                        {
+                            nomVarC = obtenerlexema(numLexema).nombre;
+                        }
+                        
                     }
                     else
                     {
@@ -1195,6 +1232,7 @@ namespace Proyecto1
                 escribirEnConsola("- ERROR SINTACTICO: Se esperaba un 'nombre'" + error(numLexema));
             }
         }
+
         public void valor()
         {
             if (validar(8))
@@ -1232,6 +1270,7 @@ namespace Proyecto1
                 escribirEnConsola("- ERROR SINTACTICO: Se esperaba un 'valor'" + error(numLexema));
             }
         }
+
         public void tipo()
         {
             if (validar(4))
@@ -1311,6 +1350,7 @@ namespace Proyecto1
 
         public string suma()
         {
+            
             double total = 0;
             if (validar(26))
             {
@@ -1323,6 +1363,7 @@ namespace Proyecto1
             }
             return "" + total;
         }
+
         public string resta()
         {
             double total = 0;
@@ -1352,14 +1393,18 @@ namespace Proyecto1
             }
             return "" + total;
         }
-
+    
         public string division()
         {
             double total = 0;
             if (validar(29))
             {
                 string[,] valor = operacionBinaria();
-                total = Convert.ToDouble(valor[0, 0]) / Convert.ToDouble(valor[0, 1]);
+                try
+                {
+                    total = Convert.ToDouble(valor[0, 0]) / Convert.ToDouble(valor[0, 1]);
+                }
+                catch { escribirEnConsola("No se puede valuar la funcion."); }
             }
             else
             {
@@ -1404,7 +1449,11 @@ namespace Proyecto1
             if (validar(32))
             {
                 string valor = operacionUnaria();
-                total = System.Math.Sin(Convert.ToDouble(valor));
+                try
+                {
+                    total = System.Math.Sin(Convert.ToDouble(valor));
+                }
+                catch { escribirEnConsola("No se puede valuar la funcion."); }
             }
             else
             {
@@ -1419,7 +1468,11 @@ namespace Proyecto1
             if (validar(33))
             {
                 string valor = operacionUnaria();
-                total = System.Math.Cos(Convert.ToDouble(valor));
+                try
+                {
+                    total = System.Math.Cos(Convert.ToDouble(valor));
+                }
+                catch { escribirEnConsola("No se puede valuar la funcion."); }
             }
             else
             {
@@ -1434,7 +1487,11 @@ namespace Proyecto1
             if (validar(34))
             {
                 string valor = operacionUnaria();
-                total = System.Math.Tan(Convert.ToDouble(valor));
+                try
+                {
+                    total = System.Math.Tan(Convert.ToDouble(valor));
+                }
+                catch { escribirEnConsola("No se puede valuar la funcion."); }
             }
             else
             {
@@ -1445,51 +1502,40 @@ namespace Proyecto1
 
         public string [,] operacionBinaria()
         {
+            agregarTermino(obtenerlexema(numLexema).idToken, obtenerlexema(numLexema).nombre);
             string[,] valores = new string[,] { { "", "" }, } ;
             if (validar(20))
             {
-                switch (obtenerlexema(numLexema + 1).idToken)
-                {
-                    case "1":
-                        valores[0, 0] = obtenerlexema(numLexema + 1).nombre;
-                        numLexema++;
-                        break;
-                    case "2":
-                        valores[0, 0] = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
-                        if (valores[0, 0] == "")
-                            valores[0, 0] = obtenerConstante(obtenerlexema(numLexema + 1).nombre);
-                        numLexema++;
-                        break;
-                    default:
-                        valores[0, 0] = operacion();
-                        break;
-                }
+                agregarTermino(obtenerlexema(numLexema).idToken, obtenerlexema(numLexema).nombre);
 
-                if (!validar(22))
+                valores[0, 0] = argumento();
+
+                if (validar(22))
+                {
+                    agregarTermino(obtenerlexema(numLexema).idToken, obtenerlexema(numLexema).nombre);
+                }
+                else
                 {
                     escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
                 }
-
-                switch (obtenerlexema(numLexema + 1).idToken)
+                
+                valores[0, 1] = argumento();
+                
+                if (validar(21))
                 {
-                    case "1":
-                        valores[0, 1] = obtenerlexema(numLexema + 1).nombre;
-                        numLexema++;
-                        break;
-                    case "2":
-                        valores[0, 1] = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
-                        if(valores[0, 1]=="")
-                        valores[0, 1] = obtenerConstante(obtenerlexema(numLexema + 1).nombre);
-                        numLexema++;
-                        break;
-                    default:
-                        valores[0, 1] = operacion();
-                        break;
+                    if(obtenerlexema(numLexema).idToken == "50" | obtenerlexema(numLexema).idToken == "24")
+                    {
+                        agregarTermino(obtenerlexema(numLexema-1).idToken, obtenerlexema(numLexema-1).nombre);
+                    }else
+                    {
+                        agregarTermino(obtenerlexema(numLexema).idToken, obtenerlexema(numLexema).nombre);
+                    }
                 }
-                if (!validar(21))
+                else
                 {
                     escribirEnConsola("- ERROR SINTACTICO: Se esperaba ')'" + error(numLexema));
                 }
+                
             }
             else
             {
@@ -1508,38 +1554,252 @@ namespace Proyecto1
 
         public string operacionUnaria()
         {
+            agregarTermino(obtenerlexema(numLexema).idToken, obtenerlexema(numLexema).nombre);
             string valor = "";
             if (validar(20))
             {
-                switch (obtenerlexema(numLexema + 1).idToken)
+                agregarTermino(obtenerlexema(numLexema).idToken, obtenerlexema(numLexema).nombre);
+                valor = argumento();
+                
+                if (validar(21))
                 {
-                    case "1":
-                        valor = obtenerlexema(numLexema + 1).nombre;
-                        numLexema++;
-                        break;
-                    case "2":
-                        valor = obtenerlexema(numLexema + 1).nombre;
-                        numLexema++;
-                        break;
-                    default:
-                        valor = operacion();
-                        break;
+                    if (obtenerlexema(numLexema).idToken == "50" | obtenerlexema(numLexema).idToken == "24")
+                    {
+                        agregarTermino(obtenerlexema(numLexema - 1).idToken, obtenerlexema(numLexema - 1).nombre);
+                    }
+                    else
+                    {
+                        agregarTermino(obtenerlexema(numLexema).idToken, obtenerlexema(numLexema).nombre);
+                    }
                 }
-                if (!validar(21))
+                else
                 {
+                    
                     escribirEnConsola("- ERROR SINTACTICO: Se esperaba ')'" + error(numLexema));
                 }
+                
             }
             else
             {
                 escribirEnConsola("- ERROR SINTACTICO: Se esperaba '('" + error(numLexema));
             }
+            
+            if (valor == "")
+            {
+                valor = "0";
+            }
             return valor;
         }
 
+        public string argumento()
+        {
+            string valor = "";
+            switch (obtenerlexema(numLexema + 1).idToken)
+            {
+                case "1":
+                    agregarTermino(obtenerlexema(numLexema + 1).idToken, obtenerlexema(numLexema + 1).nombre);
+                    valor = obtenerlexema(numLexema + 1).nombre;
+                    numLexema++;
+                    break;
+                case "2":
+                    agregarTermino(obtenerlexema(numLexema + 1).idToken, obtenerlexema(numLexema + 1).nombre);
+                    valor = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
+                    if (valor == "")
+                        valor = obtenerConstante(obtenerlexema(numLexema + 1).nombre);
+                    numLexema++;
+                    break;
+                case "14":
+                    agregarTermino(obtenerlexema(numLexema + 1).idToken, obtenerlexema(numLexema + 1).nombre);
+                    obtenerlexema(numLexema + 1).idToken = "2";
+                    agregarTermino(obtenerlexema(numLexema + 1).idToken, obtenerlexema(numLexema + 1).nombre);
+                    numLexema++;
+                    break;
+                default:
+                    valor = operacion();
+                    break;
+            }
+            return valor;
+        }
+
+        public void funciones()
+        {
+            if (validar(9))
+            {
+                if (validar(12))
+                {
+                    if (validar(16))
+                    {
+                        funcion();
+                        otraFuncion();
+                        if (validar(11))
+                        {
+                            if (validar(12))
+                            {
+                                if (!validar(16))
+                                {
+                                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Funciones'" + error(numLexema));
+                                }
+                            }
+                            else
+                            {
+                                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Declaracion Funciones'" + error(numLexema));
+                            }
+                        }
+                        else
+                        {
+                            escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Fin Declaracion Funciones'" + error(numLexema));
+                        }
+
+                    }
+                    else
+                    {
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Funciones'" + error(numLexema));
+                    }
+                }
+                else
+                {
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Declaracion Funciones'" + error(numLexema));
+                }
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Inicio Declaracion Funciones'" + error(numLexema));
+            }
+        }
+
+        public void funcion()
+        {
+            expresion.Clear();
+
+            if (validar(9))
+            {
+                if (validar(35))
+                {
+                    cuerpoFuncion();
+
+                    if (validar(11))
+                    {
+                        if (validar(35))
+                        {
+                            agregarFuncion(nomVarC, expresion);
+                        }
+                        else
+                        {
+                            escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Funcion'" + error(numLexema));
+                        }
+
+                    }
+                    else
+                    {
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Fin Funcion'" + error(numLexema));
+                    }
+                }
+                else
+                {
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Funcion'" + error(numLexema));
+                }
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Inicio Funcion'" + error(numLexema));
+            }
+        }
+
+        public void cuerpoFuncion()
+        {
+            switch (obtenerlexema(numLexema + 1).idToken)
+            {
+                case "48":
+                    nombre();
+                    if (validar(22))
+                    {
+                        expresion2();
+                    }
+                    else
+                    {
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
+                    }
+                    break;
+                case "8":
+                    expresion2();
+                    if (validar(22))
+                    {
+                        nombre();
+                    }
+                    else
+                    {
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
+                    }
+                    break;
+                default:
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'nombre' o 'valor'" + error(numLexema));
+                    break;
+            }
+            
+        }
+
+        public void expresion2()
+        {
+            if (validar(8))
+            {
+                if (validar(23))
+                {
+                    switch (obtenerlexema(numLexema + 1).idToken)
+                    {
+                        case "1":
+                            agregarTermino(obtenerlexema(numLexema + 1).idToken, obtenerlexema(numLexema + 1).nombre);
+                            numLexema++;
+                            break;
+                        case "2":
+                            agregarTermino(obtenerlexema(numLexema + 1).idToken, obtenerlexema(numLexema + 1).nombre);
+                            numLexema++;
+                            break;
+                        default:
+                            valVarC = operacion();
+                            break;
+                    }
+                }
+                else
+                {
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba '=' " + error(numLexema));
+                }
+
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba un 'valor'" + error(numLexema));
+            }
+        }
+
+        public void otraFuncion()
+        {
+            if (validar(9))
+            {
+                nomVarC = "";
+                valVarC = "";
+                tipoVarC = "";
+                numLexema--;
+                switch (obtenerlexema(numLexema + 2).idToken)
+                {
+                    case "35":
+                        funcion();
+                        otraFuncion();
+                        break;
+                    default:
+                        escribirEnConsola("NO HAY MAS FUNCIONES");
+                        break;
+                }
+            }
+            else
+            {
+                numLexema--;
+            }
+        }
+
+
         // **************************    FUNCIONES   ***********************
 
-            //  tamañolienzo
+        //  tamañolienzo
 
         private void tamaniolienzo(int x, int y)
         {
@@ -2478,6 +2738,8 @@ namespace Proyecto1
             tablaVariables.Clear();
             tablaConstantes.Clear();
             tablaDeErrores.Clear();
+            tablaDeFuncioes.Clear();
+
             num = 1;
             numError = 1;
             anguloActual = Math.PI / 2;
@@ -2753,6 +3015,20 @@ public class lexema
     public int fila { get; set; }
     public int columna { get; set; }
     public string token { get; set; }
+}
+
+public class termino
+{
+    public string idToken { get; set; }
+    public string nomTermino { get; set; }
+   
+}
+
+public class funcion
+{
+    public string nombre { get; set; }
+    public List<termino> expresion { get; set; }
+
 }
 
 public class variable
