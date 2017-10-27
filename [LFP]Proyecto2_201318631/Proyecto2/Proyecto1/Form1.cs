@@ -585,6 +585,7 @@ namespace Proyecto1
         List<error> tablaDeErrores = new List<error>();
         List<termino> expresion = new List<termino>();
         List<funcion> tablaDeFuncioes = new List<funcion>();
+        List<grafica> tablaDeGraficas = new List<grafica>();
 
         private void agregarTermino(string idToken, string termino)
         {
@@ -702,6 +703,38 @@ namespace Proyecto1
             }
 
         }
+
+        private void agregarGrafica(string nombre, string x_positivo, string x_negativo, string y_positivo, string y_negativo, string ancho, string largo, string ruta, string funcion)
+        {
+            grafica grafica = tablaDeGraficas.Find(x => x.nombre.Contains(nombre));
+
+            if (grafica == null)
+            {
+                tablaDeGraficas.Add(new grafica() { nombre = nombre, x_positivo = x_positivo, y_negativo = y_negativo, y_positivo =  y_positivo, x_negativo = x_negativo, ancho = ancho, largo = largo, funcion = funcion, ruta = ruta });
+                escribirEnConsola("Se agrega la constante: { Grafica: " + nombre + ", funcion: " + funcion + " }");
+            }
+            else
+            {
+                escribirEnConsola("El nomre de la grafica ya ha sido utilizado: " + nombre);
+            }
+        }
+
+        private grafica obtenerGrafica(string nombre)
+        {
+
+            grafica grafica = tablaDeGraficas.Find(x => x.nombre.Contains(nombre));
+
+            if (grafica == null)
+            {
+                return null;
+            }
+            else
+            {
+                return grafica;
+            }
+
+        }
+
         //******************************************************************************************************
 
         private string validarLexema(string lexema, int fila, int columna, string tipo)
@@ -763,8 +796,7 @@ namespace Proyecto1
         int numLexema = 0;
         string nomVarC = "";
         string tipoVarC = "";
-        string valVarC = "";
-        //string expresion = "";
+        string valVarC = "", x_pos = "", x_neg = "", y_pos = "", y_neg = "", anchoVal = "", largoVal = "", rutaVal = "", nomFuncion= "";
 
         private lexema obtenerlexema(int idLexema)
         {
@@ -840,9 +872,11 @@ namespace Proyecto1
             {
                 if (validar(10))
                 {
+
                     variablesYConstantes();
                     funciones();
-                    //graficas();
+                    graficas();
+
                     if (validar(11))
                     {
                         if (validar(10))
@@ -1796,6 +1830,389 @@ namespace Proyecto1
             }
         }
 
+        public void graficas()
+        {
+            if (validar(9))
+            {
+                if (validar(17))
+                {
+                    if (validar(25))
+                    {
+                        grafica();
+                        otraGrafica();
+                        if (validar(11))
+                        {
+                            if (validar(17))
+                            {
+                                if (!validar(25))
+                                {
+                                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Graficas'" + error(numLexema));
+                                }
+                            }
+                            else
+                            {
+                                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Generacion Graficas'" + error(numLexema));
+                            }
+                        }
+                        else
+                        {
+                            escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Fin Generacion Graficas'" + error(numLexema));
+                        }
+
+                    }
+                    else
+                    {
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Funciones'" + error(numLexema));
+                    }
+                }
+                else
+                {
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Declaracion Funciones'" + error(numLexema));
+                }
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Inicio Declaracion Funciones'" + error(numLexema));
+            }
+        }
+
+        public void grafica()
+        {
+            if (validar(9))
+            {
+                if (validar(36))
+                {
+                    cuerpoGrafica();
+
+                    if (validar(11))
+                    {
+                        if (validar(36))
+                        {
+                            agregarGrafica(nomVarC, x_pos, x_neg, y_pos, y_neg, anchoVal, largoVal, rutaVal, nomFuncion);
+                        }
+                        else
+                        {
+                            escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Grafica'" + error(numLexema));
+                        }
+
+                    }
+                    else
+                    {
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Fin Grafica'" + error(numLexema));
+                    }
+                }
+                else
+                {
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Grafica'" + error(numLexema));
+                }
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba 'Inicio Grafica'" + error(numLexema));
+            }
+        }
+
+        public Boolean valCuGraficas(string idTK, string[] argumentos)
+        {
+            for(int i = 0; i < argumentos.Length; i++)
+            {
+                if(idTK == argumentos[i])
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void coma()
+        {
+           
+            if (!validar(22))
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba ','" + error(numLexema));
+            }
+        }
+
+        public void cuerpoGrafica()
+        {
+            string[] argumentos = new string[9];
+
+            argumentoGrafica(argumentos, 0);
+            coma();
+            argumentoGrafica(argumentos, 1);
+            coma();
+            argumentoGrafica(argumentos, 2);
+            coma();
+            argumentoGrafica(argumentos, 3);
+            coma();
+            argumentoGrafica(argumentos, 4);
+            coma();
+            argumentoGrafica(argumentos, 5);
+            coma();
+            argumentoGrafica(argumentos, 6);
+            coma();
+            argumentoGrafica(argumentos, 7);
+            coma();
+            argumentoGrafica(argumentos, 8);
+        }
+
+        public void argumentoGrafica(string [] argumentos, int i)
+        {
+           
+            string idTk = "";
+            idTk = obtenerlexema(numLexema + 1).idToken;
+            if (!valCuGraficas(idTk, argumentos)){
+                switch (idTk)
+                {
+                    case "48":
+                        nombre();
+                        argumentos[i] = idTk;
+                        break;
+                    case "37":
+                        x_positivo();
+                        argumentos[i] = idTk;
+                        break;
+                    case "38":
+                        x_negativo();
+                        argumentos[i] = idTk;
+                        break;
+                    case "39":
+                        y_positivo();
+                        argumentos[i] = idTk;
+                        break;
+                    case "40":
+                        y_negativo();
+                        argumentos[i] = idTk;
+                        break;
+                    case "41":
+                        ancho();
+                        argumentos[i] = idTk;
+                        break;
+                    case "42":
+                        largo();
+                        argumentos[i] = idTk;
+                        break;
+                    case "43":
+                        ruta();
+                        argumentos[i] = idTk;
+                        break;
+                    case "44":
+                    case "35":
+                        nombreFuncion();
+                        argumentos[i] = idTk;
+                        break;
+                    case "24":
+                    case "50":
+                        numLexema++;
+                        break;
+                    default:
+                        escribirEnConsola("No se acepta "+ obtenerlexema(numLexema + 1).nombre + " dentro de este contexto" + error(numLexema));
+                        numLexema++;
+                        break;
+                }
+            }
+            else
+            {
+
+            }
+                
+        }
+
+        public void otraGrafica()
+        {
+            if (validar(9))
+            {
+                nomVarC = "";
+                valVarC = "";
+                tipoVarC = "";
+                numLexema--;
+                switch (obtenerlexema(numLexema + 2).idToken)
+                {
+                    case "36":
+                        grafica();
+                        otraGrafica();
+                        break;
+                    default:
+                        escribirEnConsola("NO HAY MAS FUNCIONES");
+                        break;
+                }
+            }
+            else
+            {
+                numLexema--;
+            }
+        }
+
+        public void x_positivo()
+        {
+            if (validar(37))
+            {
+                val();
+                x_pos = valVarC;
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba un 'x_positivo'" + error(numLexema));
+            }
+        }
+
+        public void x_negativo()
+        {
+            if (validar(38))
+            {
+                val();
+                x_neg = valVarC;
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba un 'x_negativo'" + error(numLexema));
+            }
+        }
+
+        public void y_positivo()
+        {
+            if (validar(39))
+            {
+                val();
+                y_pos = valVarC;
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba un 'y_positivo'" + error(numLexema));
+            }
+        }
+
+        public void y_negativo()
+        {
+            if (validar(40))
+            {
+                val();
+                y_neg = valVarC;
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba un 'y_negativo'" + error(numLexema));
+            }
+        }
+
+        public void ancho()
+        {
+            if (validar(41))
+            {
+                val();
+                anchoVal = valVarC;
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba un 'ancho'" + error(numLexema));
+            }
+        }
+
+        public void largo()
+        {
+            if (validar(42))
+            {
+                val();
+                largoVal = valVarC;
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba un 'largo'" + error(numLexema));
+            }
+        }
+
+        public void ruta()
+        {
+            if (validar(43))
+            {
+                if (validar(23))
+                {
+                    if (validar(3))
+                    {
+                        if (obtenerlexema(numLexema).idToken == "50" | obtenerlexema(numLexema).idToken == "24")
+                        {
+                            rutaVal = obtenerlexema(numLexema - 1).nombre;
+                        }
+                        else
+                        {
+                            rutaVal = obtenerlexema(numLexema).nombre;
+                        }
+                    }
+                    else
+                    {
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba secuencia de caracteres" + error(numLexema));
+                    }
+                }
+                else
+                {
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba '='" + error(numLexema));
+                }
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba un 'ruta'" + error(numLexema));
+            }
+        }
+
+        public void nombreFuncion()
+        {
+            if (validar(35))
+            {
+                if (validar(23))
+                {
+                    if (validar(2))
+                    {
+                        if (obtenerlexema(numLexema).idToken == "50" | obtenerlexema(numLexema).idToken == "24")
+                        {
+                            nomFuncion = obtenerlexema(numLexema - 1).nombre;
+                        }
+                        else
+                        {
+                            nomFuncion = obtenerlexema(numLexema).nombre;
+                        }
+                    }
+                    else
+                    {
+                        escribirEnConsola("- ERROR SINTACTICO: Se esperaba secuencia de caracteres" + error(numLexema));
+                    }
+                }
+                else
+                {
+                    escribirEnConsola("- ERROR SINTACTICO: Se esperaba '='" + error(numLexema));
+                }
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba un 'funcion'" + error(numLexema));
+            }
+        }
+
+        public void val()
+        {
+            if (validar(23))
+            {
+                switch (obtenerlexema(numLexema + 1).idToken)
+                {
+                    case "1":
+                        valVarC = obtenerlexema(numLexema + 1).nombre;
+                        numLexema++;
+                        break;
+                    case "2":
+                        valVarC = obtenerConstante(obtenerlexema(numLexema + 1).nombre);
+                        valVarC = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
+                        numLexema++;
+                        break;
+                    default:
+                        valVarC = operacion();
+                        break;
+                }
+            }
+            else
+            {
+                escribirEnConsola("- ERROR SINTACTICO: Se esperaba '=' " + error(numLexema));
+            }
+        }
+
 
         // **************************    FUNCIONES   ***********************
 
@@ -2739,6 +3156,7 @@ namespace Proyecto1
             tablaConstantes.Clear();
             tablaDeErrores.Clear();
             tablaDeFuncioes.Clear();
+            tablaDeGraficas.Clear();
 
             num = 1;
             numError = 1;
@@ -3047,5 +3465,19 @@ public class error
     public int columna { get; set; }
     public string caracter { get; set; }
    
+}
+
+public class grafica
+{
+    public string nombre { get; set; }
+    public string x_positivo { get; set; }
+    public string x_negativo { get; set; }
+    public string y_positivo { get; set; }
+    public string y_negativo { get; set; }
+    public string ancho { get; set; }
+    public string largo { get; set; }
+    public string ruta { get; set; }
+    public string funcion { get; set; }
+
 }
 
