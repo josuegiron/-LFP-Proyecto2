@@ -13,15 +13,15 @@ using System.Windows.Forms;
 
 namespace Proyecto1
 {
-    
+
     public partial class Form1 : Form
     {
-        
+
         public Form1()
         {
             InitializeComponent();
-            obtenerXY();
-            ir(xActual, yActual);
+            
+           
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -472,7 +472,7 @@ namespace Proyecto1
         }
         
         //*******************************************************************************************************
-        string[,] token = new string[,] {
+        public string[,] token = new string[,] {
                 { "ID", "Token", "Descripcion" },
                 { "1", "Numero", "Secuencia de numeros" },
                 { "2", "id", "Cadena de numeros y letras" },
@@ -607,6 +607,19 @@ namespace Proyecto1
             }
         }
 
+        private funcion obtenerFuncion(string nombre)
+        {
+            funcion funcion = tablaDeFuncioes.Find(x => x.nombre.Equals(nombre));
+            if (funcion == null)
+            {
+                return null;
+            }
+            else
+            {
+                return funcion;
+            }
+        }
+
         private termino obtenerTermino(string idToken)
         {
             termino termino = expresion.Find(x => x.idToken.Equals(idToken));
@@ -666,6 +679,23 @@ namespace Proyecto1
             {
                 return Convert.ToString(var.valor);
             }
+
+
+        }
+
+        private variable obtenerVar(string nombre)
+        {
+
+            variable var = tablaVariables.Find(x => x.nombre.Contains(nombre));
+            if (var == null)
+            {
+                return var;
+            }
+            else
+            {
+                return var;
+            }
+
 
         }
 
@@ -810,7 +840,7 @@ namespace Proyecto1
 
         }
 
-        public string error(int idLexema)
+        private string error(int idLexema)
         {
             continuar();
             try
@@ -905,7 +935,7 @@ namespace Proyecto1
             }
         }
 
-        public void variablesYConstantes()
+        private void variablesYConstantes()
         {
             if (validar(9))
             {
@@ -983,7 +1013,7 @@ namespace Proyecto1
             }
         }
 
-        public void cuerpoConstantesYVariables()
+        private void cuerpoConstantesYVariables()
         {
             if (validar(9))
             {
@@ -1011,7 +1041,7 @@ namespace Proyecto1
             }
         }
         
-        public void constante()
+        private void constante()
         {
             if (validar(18))
             {
@@ -1040,7 +1070,7 @@ namespace Proyecto1
             }
         }
 
-        public void variable()
+        private void variable()
         {
             if (validar(49))
             {
@@ -1068,7 +1098,7 @@ namespace Proyecto1
             }
         }
 
-        public void atributos()
+        private void atributos()
         {
             switch (obtenerlexema(numLexema + 1).idToken)
             {
@@ -1232,7 +1262,7 @@ namespace Proyecto1
             
         }
 
-        public void nombre()
+        private void nombre()
         {
             if (validar(48))
             {
@@ -1267,7 +1297,7 @@ namespace Proyecto1
             }
         }
 
-        public void valor()
+        private void valor()
         {
             if (validar(8))
             {
@@ -1281,7 +1311,10 @@ namespace Proyecto1
                             break;
                         case "2":
                             valVarC = obtenerConstante(obtenerlexema(numLexema + 1).nombre);
-                            valVarC = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
+                            if (valVarC == "")
+                            {
+                                valVarC = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
+                            }
                             numLexema++;
                             break;
                         case "3":
@@ -1305,7 +1338,7 @@ namespace Proyecto1
             }
         }
 
-        public void tipo()
+        private void tipo()
         {
             if (validar(4))
             {
@@ -1343,7 +1376,7 @@ namespace Proyecto1
             }
         }
 
-        public string operacion()
+        private string operacion()
         {
             string valor = "";
             switch (obtenerlexema(numLexema + 1).idToken)
@@ -1382,7 +1415,7 @@ namespace Proyecto1
             return valor;
         }
 
-        public string suma()
+        private string suma()
         {
             
             double total = 0;
@@ -1398,7 +1431,7 @@ namespace Proyecto1
             return "" + total;
         }
 
-        public string resta()
+        private string resta()
         {
             double total = 0;
             if (validar(27))
@@ -1413,7 +1446,7 @@ namespace Proyecto1
             return "" + total;
         }
 
-        public string multiplicacion()
+        private string multiplicacion()
         {
             double total = 0;
             if (validar(28))
@@ -1428,7 +1461,7 @@ namespace Proyecto1
             return "" + total;
         }
     
-        public string division()
+        private string division()
         {
             double total = 0;
             if (validar(29))
@@ -1447,7 +1480,7 @@ namespace Proyecto1
             return "" + total;
         }
 
-        public string potencia()
+        private string potencia()
         {
             double total = 0;
             if (validar(30))
@@ -1462,7 +1495,7 @@ namespace Proyecto1
             return "" + total;
         }
 
-        public string raizCuadrada()
+        private string raizCuadrada()
         {
             double total = 0;
             if (validar(31))
@@ -1477,7 +1510,7 @@ namespace Proyecto1
             return "" + total;
         }
 
-        public string seno()
+        private string seno()
         {
             double total = 0;
             if (validar(32))
@@ -1485,7 +1518,7 @@ namespace Proyecto1
                 string valor = operacionUnaria();
                 try
                 {
-                    total = System.Math.Sin(Convert.ToDouble(valor));
+                    total = System.Math.Sin(Convert.ToDouble(valor) * Math.PI / 180);
                 }
                 catch { escribirEnConsola("No se puede valuar la funcion."); }
             }
@@ -1496,7 +1529,7 @@ namespace Proyecto1
             return "" + total;
         }
 
-        public string coseno()
+        private string coseno()
         {
             double total = 0;
             if (validar(33))
@@ -1504,7 +1537,7 @@ namespace Proyecto1
                 string valor = operacionUnaria();
                 try
                 {
-                    total = System.Math.Cos(Convert.ToDouble(valor));
+                    total = System.Math.Cos(Convert.ToDouble(valor) * Math.PI / 180);
                 }
                 catch { escribirEnConsola("No se puede valuar la funcion."); }
             }
@@ -1515,7 +1548,7 @@ namespace Proyecto1
             return "" + total;
         }
 
-        public string tangente()
+        private string tangente()
         {
             double total = 0;
             if (validar(34))
@@ -1523,7 +1556,7 @@ namespace Proyecto1
                 string valor = operacionUnaria();
                 try
                 {
-                    total = System.Math.Tan(Convert.ToDouble(valor));
+                    total = System.Math.Tan(Convert.ToDouble(valor) * Math.PI / 180);
                 }
                 catch { escribirEnConsola("No se puede valuar la funcion."); }
             }
@@ -1534,7 +1567,7 @@ namespace Proyecto1
             return "" + total;
         }
 
-        public string [,] operacionBinaria()
+        private string [,] operacionBinaria()
         {
             agregarTermino(obtenerlexema(numLexema).idToken, obtenerlexema(numLexema).nombre);
             string[,] valores = new string[,] { { "", "" }, } ;
@@ -1586,7 +1619,7 @@ namespace Proyecto1
             return valores;
         }
 
-        public string operacionUnaria()
+        private string operacionUnaria()
         {
             agregarTermino(obtenerlexema(numLexema).idToken, obtenerlexema(numLexema).nombre);
             string valor = "";
@@ -1625,7 +1658,7 @@ namespace Proyecto1
             return valor;
         }
 
-        public string argumento()
+        private string argumento()
         {
             string valor = "";
             switch (obtenerlexema(numLexema + 1).idToken)
@@ -1655,7 +1688,7 @@ namespace Proyecto1
             return valor;
         }
 
-        public void funciones()
+        private void funciones()
         {
             if (validar(9))
             {
@@ -1701,7 +1734,7 @@ namespace Proyecto1
             }
         }
 
-        public void funcion()
+        private void funcion()
         {
             expresion.Clear();
 
@@ -1739,7 +1772,7 @@ namespace Proyecto1
             }
         }
 
-        public void cuerpoFuncion()
+        private void cuerpoFuncion()
         {
             switch (obtenerlexema(numLexema + 1).idToken)
             {
@@ -1772,7 +1805,7 @@ namespace Proyecto1
             
         }
 
-        public void expresion2()
+        private void expresion2()
         {
             if (validar(8))
             {
@@ -1805,7 +1838,7 @@ namespace Proyecto1
             }
         }
 
-        public void otraFuncion()
+        private void otraFuncion()
         {
             if (validar(9))
             {
@@ -1830,7 +1863,7 @@ namespace Proyecto1
             }
         }
 
-        public void graficas()
+        private void graficas()
         {
             if (validar(9))
             {
@@ -1876,7 +1909,7 @@ namespace Proyecto1
             }
         }
 
-        public void grafica()
+        private void grafica()
         {
             if (validar(9))
             {
@@ -1889,6 +1922,7 @@ namespace Proyecto1
                         if (validar(36))
                         {
                             agregarGrafica(nomVarC, x_pos, x_neg, y_pos, y_neg, anchoVal, largoVal, rutaVal, nomFuncion);
+                            generarGrafica(nomVarC);
                         }
                         else
                         {
@@ -1912,7 +1946,7 @@ namespace Proyecto1
             }
         }
 
-        public Boolean valCuGraficas(string idTK, string[] argumentos)
+        private Boolean valCuGraficas(string idTK, string[] argumentos)
         {
             for(int i = 0; i < argumentos.Length; i++)
             {
@@ -1924,7 +1958,7 @@ namespace Proyecto1
             return false;
         }
 
-        public void coma()
+        private void coma()
         {
            
             if (!validar(22))
@@ -1933,7 +1967,7 @@ namespace Proyecto1
             }
         }
 
-        public void cuerpoGrafica()
+        private void cuerpoGrafica()
         {
             string[] argumentos = new string[9];
 
@@ -1956,7 +1990,7 @@ namespace Proyecto1
             argumentoGrafica(argumentos, 8);
         }
 
-        public void argumentoGrafica(string [] argumentos, int i)
+        private void argumentoGrafica(string [] argumentos, int i)
         {
            
             string idTk = "";
@@ -2018,7 +2052,7 @@ namespace Proyecto1
                 
         }
 
-        public void otraGrafica()
+        private void otraGrafica()
         {
             if (validar(9))
             {
@@ -2043,7 +2077,7 @@ namespace Proyecto1
             }
         }
 
-        public void x_positivo()
+        private void x_positivo()
         {
             if (validar(37))
             {
@@ -2056,7 +2090,7 @@ namespace Proyecto1
             }
         }
 
-        public void x_negativo()
+        private void x_negativo()
         {
             if (validar(38))
             {
@@ -2069,7 +2103,7 @@ namespace Proyecto1
             }
         }
 
-        public void y_positivo()
+        private void y_positivo()
         {
             if (validar(39))
             {
@@ -2082,7 +2116,7 @@ namespace Proyecto1
             }
         }
 
-        public void y_negativo()
+        private void y_negativo()
         {
             if (validar(40))
             {
@@ -2095,7 +2129,7 @@ namespace Proyecto1
             }
         }
 
-        public void ancho()
+        private void ancho()
         {
             if (validar(41))
             {
@@ -2108,7 +2142,7 @@ namespace Proyecto1
             }
         }
 
-        public void largo()
+        private void largo()
         {
             if (validar(42))
             {
@@ -2121,7 +2155,7 @@ namespace Proyecto1
             }
         }
 
-        public void ruta()
+        private void ruta()
         {
             if (validar(43))
             {
@@ -2154,7 +2188,7 @@ namespace Proyecto1
             }
         }
 
-        public void nombreFuncion()
+        private void nombreFuncion()
         {
             if (validar(35))
             {
@@ -2187,7 +2221,7 @@ namespace Proyecto1
             }
         }
 
-        public void val()
+        private void val()
         {
             if (validar(23))
             {
@@ -2199,7 +2233,10 @@ namespace Proyecto1
                         break;
                     case "2":
                         valVarC = obtenerConstante(obtenerlexema(numLexema + 1).nombre);
-                        valVarC = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
+                        if(valVarC == "")
+                        {
+                            valVarC = obtenerVariable(obtenerlexema(numLexema + 1).nombre);
+                        }
                         numLexema++;
                         break;
                     default:
@@ -2213,913 +2250,117 @@ namespace Proyecto1
             }
         }
 
+        private void generarGrafica(string nombre)
+        {
+            
+            
+            grafica grafica = obtenerGrafica(nombre);
+            int x = Convert.ToInt16(grafica.ancho);
+            int y = Convert.ToInt16(grafica.largo);
+            TabPage imagenContenedor = new TabPage();
+            imagenContenedor.Text = grafica.nombre;
+            PictureBox imagen = new PictureBox();
+            imagen.Name = grafica.nombre;
+            imagen.SetBounds(0, 0, x, y);
+            imagen.BackColor = Color.White;
+
+            funcion funcion = obtenerFuncion(grafica.funcion);
+            List<termino> expresion2 = funcion.expresion;
+            
+
+            Bitmap fondo = new Bitmap(imagen.Width, imagen.Height);
+            Graphics g = Graphics.FromImage(fondo);
+            int varY = y / 2;
+
+            for (int i = -Convert.ToInt16(grafica.x_negativo); i < Convert.ToInt16(grafica.x_positivo); i++)
+            {
+                int avanceX = x / (Convert.ToInt16(grafica.x_negativo) + Convert.ToInt16(grafica.x_positivo));
+                int avanceY = y / (Convert.ToInt16(grafica.y_negativo) + Convert.ToInt16(grafica.y_positivo));
+
+                variable variableX = obtenerVar("x");
+                variableX.valor = Convert.ToString(i);
+
+                int varX = x / 2 + i * avanceX;
+
+
+                Calcular resolver = new Calcular(expresion2, tablaVariables, tablaConstantes);
+                string reslutado = resolver.resultado();
+                double res;
+                Double.TryParse(reslutado, out res);
+                res = -avanceY * res;
+
+                varY = y/2 + (int)res;
+                if (varY < 0)
+                {
+                    varY = 0;
+                }
+                if (varY > y)
+                {
+                    varY = y;
+                }
+
+
+
+                variableX.valor = Convert.ToString(i+1);
+                Calcular resolver2 = new Calcular(expresion2, tablaVariables, tablaConstantes);
+                string reslutado2 = resolver2.resultado();
+                double res2;
+                    Double.TryParse(reslutado2, out res2);
+                res2 = -avanceY * res2;
+
+
+                int varK = y / 2 + (int)res2;
+                if (varK < 0)
+                {
+                    varK = 0;
+                }
+
+                if (varK > y)
+                {
+                    varK = y;
+                }
+
+                int varM = x / 2 + (i+1) * avanceX;
+
+                g.DrawLine(Pens.Black, new PointF(varX, varY), new PointF(varM, varK));
+                escribirEnConsola(varX + ", " + varY);
+            }
+           
+            g.DrawLine(Pens.Black, new PointF(x/2, 0), new PointF(x/2, y));
+            g.DrawLine(Pens.Black, new PointF(0, y/2), new PointF(x, y/2));
+            
+            
+
+
+
+            //Aqui pintas todas las lineas que quieras
+            imagen.BackgroundImage = fondo;
+
+            
+
+            imagen.Refresh();
+
+
+            imagenContenedor.Controls.Add(imagen);
+
+            galeria.TabPages.Add(imagenContenedor);
+        }
+
 
         // **************************    FUNCIONES   ***********************
 
-        //  tamañolienzo
+       
 
-        private void tamaniolienzo(int x, int y)
-        {
-            lienzo.Width = a*x;
-            lienzo.Height = a*y;
-            tortuga.SetBounds(lienzo.Width/2-16, lienzo.Height/2-16, 32,32);
-        }
-
-        //  colorlienzo
-        private void colorlienzo(string color)
-        {
-            color = color.ToLower();
-            Console.WriteLine(color);
-            switch (color)
-            {
-                case "celeste":
-                    lienzo.BackColor = Color.LightBlue;
-                    break;
-                case "amarillo":
-                    lienzo.BackColor = Color.Yellow;
-                    break;
-                case "blanco":
-                    lienzo.BackColor = Color.White;
-                    break;
-                default:
-                    escribirEnConsola("Color no reconocido...");
-                    break;
-            }
-             
-        }
-
-        //  avanzar:
-
-        private void obtenerXY()
-        {
-            xActual = tortuga.Bounds.X + 16;
-            yActual = tortuga.Bounds.Y + 16;
-        }
-
-        private void avanzar(double c)
-        {
-            c = c * a;
-            double angulo = anguloActual;
-
-            double xDouble = c * Math.Cos(angulo);
-            double yDouble = c * Math.Sin(angulo);
-
-            double x = Math.Round(xDouble);
-            double y = Math.Round(yDouble);
-
-            if (pincelAbajo) {
-                pintar(x, y, c);
-            }
-            
-            
-            if (xActual + x > lienzo.Size.Width)
-            {
-                xActual = lienzo.Size.Width;
-            }
-            else if(xActual + x < 0)
-            {
-                xActual = 0;
-            }
-            else
-            {
-                xActual = xActual + x;
-            }
-
-            if (yActual - y > lienzo.Size.Height)
-            {
-                yActual = lienzo.Size.Height;
-            }
-            else if (yActual - y < 0)
-            {
-                yActual = 0;
-            }
-            else
-            {
-                yActual = yActual - y;
-            }
-
-            ir(xActual, yActual);
-            
-        }
-
-        // girarIzq:
-
-        private void girarIzq(double angulo)
-        {
-            anguloActual = anguloActual + angulo * Math.PI / 180.0;
-            //tortuga.Image = rotateImage(tortuga, anguloActual);
-        }
-
-        // girarDer:
-
-        private void girarDer(double angulo)
-        {
-            anguloActual = anguloActual - angulo * Math.PI / 180.0;
-        }
-
-        // ir:
-        
-        private void ir(double x, double y)
-        {
-            xActual = x;
-            yActual = y;
-
-            //dejar caquita
-            Label label1 = new Label();
-            label1.SetBounds((int)xActual-2, (int)yActual-2, 5, 5);
-            lienzo.Controls.Add(label1);
-            label1.BackColor = Color.Black;
-
-            tortuga.SetBounds((int)xActual-16, (int)yActual-16, 32, 32);
-            Console.WriteLine("Ubicacion: "+xActual+", "+yActual);
-
-        }
-
-        //   FUNCION AUXILIAR:
-
-        private void agregarPixel(int m, int n)
-        {
-
-            Label label1 = new Label();
-            label1.SetBounds(m, n, 2, 2);
-            lienzo.Controls.Add(label1);
-
-            switch (colorPixel)
-            {
-                case "azul":
-                    label1.BackColor = Color.Blue;
-                    break;
-                case "rojo":
-                    label1.BackColor = Color.Red;
-                    break;
-                case "negro":
-                    label1.BackColor = Color.Black;
-                    break;
-                default:
-                    escribirEnConsola("Color no reconocido...");
-                    break;
-            }
-        }
-
-        // retroceder
-
-        private void retroceder(int c)
-        {
-            anguloActual += Math.PI;
-            avanzar(c);
-            anguloActual += Math.PI;
-        }
-
-        // colorpincel
-        
-        private void colorPincel(string color)
-        {
-            colorPixel = color;
-        }
-        
-        //   FUNCION PINTAR:
-
-        private void pintar(double x, double y, double c)
-        {
-            if (y == 0)
-            {
-                y = 1;
-            }
-            else if(x == 0)
-            {
-                x = 1;
-            }
-
-            Console.WriteLine("Ubicacion PINTAR: " + xActual + ", " + yActual);
-            Console.WriteLine("x: " + x + ", y: " + y);
-            double salto = 0;
-            int m = (int)xActual, n = (int)yActual;
-            if (Math.Cos(anguloActual) >= 0 && Math.Tan(anguloActual) >= 0)
-            {
-                marcador(salto, m, n, x, y, true, true);
-            }
-            else if (Math.Cos(anguloActual) <= 0 && Math.Tan(anguloActual) <= 0)
-            {
-                marcador(salto, m, n, x, y, false, true);
-            }
-            else if (Math.Cos(anguloActual) <= 0 && Math.Tan(anguloActual) >= 0)
-            {
-                marcador(salto, m, n, x, y, false, false);
-            }
-            else if (Math.Cos(anguloActual) >= 0 && Math.Tan(anguloActual) <= 0)
-            {
-                marcador(salto, m, n, x, y, true, false);
-            }
+       
+    
 
 
-        }
 
-        // PINTAR
-        private void marcador(double salto, int m, int n, double x, double y, Boolean mBoolean, Boolean nBoolean)
-        {
-            double total = 0;
-            Boolean xMayor = true;
-            x = Math.Abs(x);
-            y = Math.Abs(y);
-            if (y > x)
-            {
-                salto = y / x;
-                xMayor = false;
-                total = x;
-            }
-            else if (y < x)
-            {
-                salto = x / y;
-                xMayor = true;
-                total = y;
-            }
-            else
-            {
-                for (int i = 0; i < x; i++)
-                { 
-                    agregarPixel(m, n);
-                    if (mBoolean && nBoolean && xMayor) { m++; n--; }
-                    else if (!mBoolean && nBoolean && xMayor) { m--; n--; }
-                    else if (!mBoolean && !nBoolean && xMayor) { m--; n++; }
-                    else if (mBoolean && !nBoolean && xMayor) { m++; n++; }
-                }
-            }
 
-            int saltoInt = (int)salto;
-            double deci = salto - saltoInt;
-            double deci2 = 0;
-
-            for (int j = 0; j < total; j++)
-            {
-                deci2 = deci2 + deci;
-                for (int i = 0; i < saltoInt; i++)
-                {
-                    agregarPixel(m, n);
-
-                    if (mBoolean && nBoolean && !xMayor) { n--; }
-                    else if (mBoolean && nBoolean && xMayor) { m++; }
-
-                    else if (!mBoolean && nBoolean && !xMayor) { n--; }
-                    else if (!mBoolean && nBoolean && xMayor) { m--; }
-
-                    else if (!mBoolean && !nBoolean && !xMayor) { n++; }
-                    else if (!mBoolean && !nBoolean && xMayor) { m--; }
-
-                    else if (mBoolean && !nBoolean && !xMayor) { n++; }
-                    else if (mBoolean && !nBoolean && xMayor) { m++; }
-
-                    if (deci2 >= 1.0)
-                    {
-                        deci2 = deci2 - 1.0;
-                        agregarPixel(m, n);
-
-                        if (mBoolean && nBoolean && !xMayor) { n--; }
-                        else if (mBoolean && nBoolean && xMayor) { m++; }
-
-                        else if (!mBoolean && nBoolean && !xMayor) { n--; }
-                        else if (!mBoolean && nBoolean && xMayor) { m--; }
-
-                        else if (!mBoolean && !nBoolean && !xMayor) { n++; }
-                        else if (!mBoolean && !nBoolean && xMayor) { m--; }
-
-                        else if (mBoolean && !nBoolean && !xMayor) { n++; }
-                        else if (mBoolean && !nBoolean && xMayor) { m++; }
-                    }
-
-                    if (Math.Round(deci2) == 1 && j < x)
-                    {
-                        if (mBoolean && nBoolean && !xMayor) { agregarPixel(m + 1, n); }
-                        else if (mBoolean && nBoolean && xMayor) { agregarPixel(m, n-1); }
-
-                        else if (!mBoolean && nBoolean && !xMayor) { agregarPixel(m-1, n ); }
-                        else if (!mBoolean && nBoolean && xMayor) { agregarPixel(m, n - 1); }
-
-                        else if (!mBoolean && !nBoolean && !xMayor) { agregarPixel(m - 1, n); }
-                        else if (!mBoolean && !nBoolean && xMayor) { agregarPixel(m, n + 1); }
-
-                        else if (mBoolean && !nBoolean && !xMayor) { agregarPixel(m + 1, n); }
-                        else if (mBoolean && !nBoolean && xMayor) { agregarPixel(m , n + 1); }
-                    }
-                }
-
-                if (mBoolean && nBoolean && xMayor) { n--; }
-                else if (mBoolean && nBoolean && !xMayor) { m++; ; }
-
-                else if (!mBoolean && nBoolean && xMayor) { n--; }
-                else if (!mBoolean && nBoolean && !xMayor) { m--; }
-
-                else if (!mBoolean && !nBoolean && xMayor) { n++; }
-                else if (!mBoolean && !nBoolean && !xMayor) { m--; }
-
-                else if (mBoolean && !nBoolean && xMayor) { n++; }
-                else if (mBoolean && !nBoolean && !xMayor) { m++; }
-            }
-        }
-
-        //  centrar
-
-        private void centrar()
-        {
-            int x = lienzo.Width/2;
-            int y = lienzo.Height/2;
-            ir(x, y);
-        }
-
-        // irX
-
-        private void irX(int x)
-        {
-            ir(x , yActual);
-        }
-
-        // irY
-
-        private void irY(int y)
-        {
-            ir(xActual, y);
-        }
-
-        // subirPincel/bajarPincel
-
-        private void subirPincel()
-        {
-            pincelAbajo = false;
-        }
-        private void bajarPincel()
-        {
-            pincelAbajo = true;
-        }
-
-        // VARIABLES
-
-        double xActual = 0;
-        double yActual = 0;
-        string colorPixel = "azul";
-        Boolean pincelAbajo = true;
-        double anguloActual = Math.PI / 2;
-        int a = 5;
-        
-        public int evaluarExpresion(string expresion)
-        {
-            Evaluador1 evaluador = new Evaluador1();
-            evaluador.evaluarExpresion(expresion);
-            double r = evaluador.F();
-            int resultadoInt = (int)Math.Round(r);
-            //escribirEnConsola("Evaluando: " + expresion);
-            return resultadoInt;
-        }
+       
         
 
-        //  Ejecutor
-
-        private void ejecutar()
-        {
-            escribirEnConsola("Ejecutando instrucciones...");
-            agregarLexema("error", "error", 0, 0,"error");
-            agregarLexema("error1", "error1", 0, 0,"error");
-
-            int estadoInicial = 0;
-            int estadoActual = 0;
-            string tokenactual;
-            string tokenVariable = "";
-            string tokenAuxiliar = "";
-            string expresion = "";
-            string comando = " ";
-            string tId = "";
-            string x = "", y = "";
-
-
-            for (estadoInicial = 0; estadoInicial < tablaDeSimbolos.Count; estadoInicial++)
-            {
-                tokenactual = tablaDeSimbolos[estadoInicial].nombre;
-                tId = tablaDeSimbolos[estadoInicial].idToken;
-
-                switch (estadoActual)
-                {
-                    case 0:
-                        if(tId == "4")
-                        {
-                            estadoActual = 1;
-                            comando += tokenactual + " ";
-                        }
-                        else if (tId == "2")
-                        {
-                            estadoActual = 2;
-                            comando += tokenactual + " ";
-                            tokenVariable = tokenactual;
-                        }
-                        else if (tId == "3")
-                        {
-                            estadoActual = 8;
-                            comando += tokenactual + " ";
-                            
-                        }
-                        else if (tId == "5" || tId == "12")
-                        {
-                            estadoActual = 13;
-                            comando += tokenactual + " ";
-                            tokenAuxiliar = tId;
-                        }
-                        else if (tId == "7" || tId == "8" || tId == "9" || tId == "10" || tId == "13" || tId == "14")
-                        {
-                            estadoActual = 18;
-                            comando += tokenactual + " ";
-                            tokenAuxiliar = tId;
-                        }
-                        else if (tId == "6" || tId == "17")
-                        {
-                            estadoActual = 21;
-                            comando += tokenactual + " ";
-                            tokenAuxiliar = tId;
-                        }
-                        else if (tId == "15" || tId == "16" || tId == "11")
-                        {
-                            estadoActual = 24;
-                            comando += tokenactual + " ";
-                            tokenAuxiliar = tId;
-                        }
-                        else {estadoActual = 500;}
-
-                        break;
-                    case 1:
-                        if (tId == "2")
-                        {
-                            estadoActual = 2;
-                            comando += tokenactual + " ";
-                            tokenVariable = tokenactual;
-
-                        }
-                        else
-                        {
-                            estadoActual = 500;
-                        }
-                        break;
-                    case 2:
-                        if (tId == "23")
-                        {
-                            estadoActual = 3;
-                            comando += tokenactual + " ";
-                        }
-                        else
-                        {
-                            estadoActual = 500;
-                        }
-                        break;
-                    case 3: // caso numero o variable
-                        if (tId == "1")
-                        {
-                            estadoActual = 4;
-                            comando += tokenactual + " ";
-                            expresion += tokenactual + " ";
-
-                        }
-                        else if (tId == "2")
-                        {
-                            estadoActual = 4;
-                            comando += tokenactual + " ";
-                            expresion += obtenerVariable(tokenactual) + " ";
-                        }
-                        else
-                        {
-                            estadoActual = 500;
-                        }
-                        break;
-                    case 4:
-                        if (tId == "18")
-                        {
-                            estadoActual = 5;
-                            comando += tokenactual + " ";
-                            expresion += tokenactual + " ";
-                        }
-                        else if (tId == "19")
-                        {
-                            estadoActual = 7;
-                            comando += tokenactual + " ";
-                            estadoInicial--;
-                            
-                        }
-                        else
-                        {
-                            estadoActual = 500;
-                        }
-                        break;
-                    case 5:
-                        if (tId == "2")
-                        {
-                            estadoActual = 6;
-                            comando += tokenactual + " ";
-                            expresion += obtenerVariable(tokenactual) + " ";
-                            
-                        }
-                        else if (tId == "1")
-                        {
-                            estadoActual = 4;
-                            comando += tokenactual + " ";
-                            expresion += tokenactual + " ";
-                        }
-                        else
-                        {
-                            estadoActual = 500;
-                        }
-                        break;
-                    case 6:
-                        if (tId == "18")
-                        {
-                            estadoActual = 5;
-                            comando += tokenactual + " ";
-                            expresion += tokenactual + " ";
-                        }
-                        else if (tId == "1")
-                        {
-                            estadoActual = 4;
-                            comando += tokenactual + " ";
-                            expresion += tokenactual + " ";
-                        }
-                        else if (tId == "19")
-                        {
-                            
-                            estadoActual = 7;
-                            comando += tokenactual + " ";
-                            estadoInicial--;
-                        }
-                        else
-                        {
-                            estadoActual = 500;
-                        }
-                        break;
-                    case 7:
-                        //Asignar valor
-                        //escribirEnConsola("Ejecutando instruccion: " + comando);
-
-                        if (ValidarExpresion(expresion))
-                        {
-                            int valorVariable = evaluarExpresion(expresion);
-                            //agregarVariable(tokenVariable, valorVariable);
-                        }
-                        else
-                        {
-                            escribirEnConsola("Una o mas variables no declaradas...\r\n Se detiene la ejecucion...");
-                        }
-
-
-                        // LIMPIAR
-                        estadoActual = 0;
-                        tokenVariable = " ";
-                        expresion = " ";
-                        comando = " ";
-
-                        break;
-
-                    case 8: // FUNCION ESCRIBIR
-                        if(tId == "20")
-                        {
-                            estadoActual = 9;
-                            comando += tokenactual + " ";
-                        }
-                        else{estadoActual = 500;}
-                        break;
-                    case 9: 
-                        if (tId == "2")
-                        {
-                            estadoActual = 10;
-                            comando += tokenactual + " ";
-                            tokenVariable = tokenactual;
-                        }else { estadoActual = 500; }
-                        break;
-                    case 10:
-                        if (tId == "21")
-                        {
-                            estadoActual = 11;
-                            comando += tokenactual + " ";
-                           
-                        }
-                        else { estadoActual = 500; }
-                        break;
-                    case 11:
-                        if (tId == "19")
-                        {
-                            estadoActual = 12;
-                            comando += tokenactual + " ";
-                            estadoInicial--;
-                        }
-                        else { estadoActual = 500; }
-                        break;
-                    case 12:
-                        expresion = obtenerVariable(tokenVariable);
-                        if (ValidarExpresion(expresion))
-                        {
-                            escribirEnConsola(expresion);
-                        }
-                        else
-                        {
-                            escribirEnConsola("Una o mas variables no declaradas...\r\n Se detiene la ejecucion...");
-                        }
-                        
-
-                        // LIMPIAR
-                        estadoActual = 0;
-                        tokenVariable = " ";
-                        expresion = " ";
-                        comando = " ";
-                        break;
-
-
-
-                    case 13:    //  BUNCION TAMAÑOLIENZO / IRX
-                        if (tId == "1")
-                        {
-                            estadoActual = 14;
-                            comando += tokenactual + " ";
-                            x = tokenactual;
-                        }
-                        else if(tId == "2")
-                        {
-                            estadoActual = 14;
-                            comando += tokenactual + " ";
-                            x = obtenerVariable(tokenactual) + " ";
-                        }
-                        else { estadoActual = 500; }
-                        break;
-                    case 14:
-                        if (tId == "22")
-                        {
-                            estadoActual = 15;
-                            comando += tokenactual + " ";
-
-                        }
-                        else { estadoActual = 500; }
-                        break;
-                    case 15:
-                        if (tId == "1")
-                        {
-                            estadoActual = 16;
-                            comando += tokenactual + " ";
-                            y = tokenactual;
-                        }
-                        else if (tId == "2")
-                        {
-                            estadoActual = 16;
-                            comando += tokenactual + " ";
-                            y = obtenerVariable(tokenactual) + " ";
-                        }
-                        else { estadoActual = 500; }
-                        break;
-                    case 16:
-                        if (tId == "19")
-                        {
-                            estadoActual = 17;
-                            comando += tokenactual + " ";
-                            estadoInicial--;
-                        }
-                        else { estadoActual = 500; }
-                        break;
-                    case 17:
-
-                        if (ValidarExpresion(x) && ValidarExpresion(y))
-                        {
-                            if(tokenAuxiliar == "12")
-                            {
-                                ir(Convert.ToInt16(x), Convert.ToInt16(y));
-                            }
-                            else
-                            {
-                                tamaniolienzo(Convert.ToInt16(x), Convert.ToInt16(y));
-                            }
-                            
-                        }
-                        else
-                        {
-                            escribirEnConsola("una o mas variables no declaradas...\r\n Se detiene la ejecucion...");
-                        }
-
-                        // LIMPIAR
-                        estadoActual = 0;
-                        tokenVariable = " ";
-                        expresion = " ";
-                        comando = " ";
-                        x = "";
-                        y = "";
-                        break;
-                    case 18:    //  FUNCION 789101314 
-                        if (tId == "1")
-                        {
-                            estadoActual = 19;
-                            comando += tokenactual + " ";
-                            x = tokenactual;
-                        }
-                        else if (tId == "2")
-                        {
-                            estadoActual = 19;
-                            comando += tokenactual + " ";
-                            x = obtenerVariable(tokenactual) + " ";
-                        }
-                        else { estadoActual = 500; }
-                        break;
-                    case 19:
-                        if (tId == "19")
-                        {
-                            estadoActual = 20;
-                            comando += tokenactual + " ";
-                            estadoInicial--;
-                        }
-                        else { estadoActual = 500; }
-                        break;
-                    case 20:
-
-                        if (ValidarExpresion(x))
-                        {
-                            if (tokenAuxiliar == "7")
-                            {
-                                avanzar(Convert.ToInt16(x));
-                            }
-                            else if(tokenAuxiliar == "8")
-                            {
-                                retroceder(Convert.ToInt16(x));
-                            }
-                            else if (tokenAuxiliar == "9")
-                            {
-                                girarIzq(Convert.ToInt16(x));
-                            }
-                            else if (tokenAuxiliar == "10")
-                            {
-                                girarDer(Convert.ToInt16(x));
-                            }
-                            else if (tokenAuxiliar == "13")
-                            {
-                                irX(Convert.ToInt16(x));
-                            }
-                            else if (tokenAuxiliar == "14")
-                            {
-                                irY(Convert.ToInt16(x));
-                            }
-
-                        }
-                        else
-                        {
-                            escribirEnConsola("una o mas variables no declaradas...\r\n Se detiene la ejecucion...");
-                        }
-
-                        // LIMPIAR
-                        estadoActual = 0;
-                        tokenVariable = " ";
-                        expresion = " ";
-                        comando = " ";
-                        x = "";
-                        y = "";
-                        break;
-                    case 21:
-                        if (tId == "2")
-                        {
-                            estadoActual = 22;
-                            comando += tokenactual + " ";
-                            expresion += tokenactual;
-                        }
-                        else { estadoActual = 500; }
-                        break;
-                    case 22:
-                        if (tId == "19")
-                        {
-                            estadoActual = 23;
-                            comando += tokenactual + " ";
-                            estadoInicial--;
-                        }
-                        else { estadoActual = 500; }
-                        break;
-                    case 23:
-                        expresion = expresion.Trim();
-                        if (!ValidarExpresion(expresion))
-                        {
-                           
-                            if (tokenAuxiliar == "6")
-                            {
-                                if (expresion == "celeste" || expresion == "amarillo" || expresion == "blanco")
-                                {
-                                    colorlienzo(expresion);
-                                }
-                                else
-                                {
-                                    escribirEnConsola("Color "+expresion+" no reconocido...");
-                                }
-                            }
-                            else if(tokenAuxiliar == "17" )
-                            {
-                                if (expresion == "rojo" || expresion == "azul" || expresion == "negro")
-                                {
-                                    colorPincel(expresion);
-                                }
-                                else
-                                {
-                                    escribirEnConsola("Color " + expresion + " no reconocido...");
-                                }
-                                
-                            }
-
-                        }
-                        else
-                        {
-                            escribirEnConsola("Una o mas variables no declaradas...\r\n Se detiene la ejecucion...");
-                        }
-
-                        // LIMPIAR
-                        estadoActual = 0;
-                        tokenVariable = " ";
-                        expresion = "";
-                        comando = " ";
-                        x = "";
-                        y = "";
-                        break;
-                    case 24:
-                        if (tId == "19")
-                        {
-                            estadoActual = 25;
-                            comando += tokenactual + " ";
-                            estadoInicial--;
-                        }
-                        else { estadoActual = 500; }
-                        break;
-                    case 25:
-                        if(tokenAuxiliar == "15")
-                        {
-                            subirPincel();
-                        }
-                        else if (tokenAuxiliar == "16")
-                        {
-                            bajarPincel();
-                        }
-                        else
-                        {
-                            centrar();
-                        }
-                        estadoActual = 0;
-                        tokenVariable = " ";
-                        expresion = "";
-                        comando = " ";
-                        x = "";
-                        y = "";
-                        break;
-                    case 500:
-                        estadoInicial = 500;
-                        if (!(comando == " ")) {
-                            escribirEnConsola("No se reconoce la instruccion o esta incompleta...\r\n \"" + comando + "\"\r\n Se detiene la ejecucion...");
-                        }
-                        else
-                        {
-                            escribirEnConsola("Se espera una o mas instrucciones...");
-                        }
-                        comando = " ";
-                        break;
-
-                }
-            }
-
-
-            lexema eliminar = tablaDeSimbolos.Single(r => r.nombre == "error");
-            tablaDeSimbolos.Remove(eliminar);
-            eliminar = tablaDeSimbolos.Single(r => r.nombre == "error1");
-            tablaDeSimbolos.Remove(eliminar);
-        }
-        public Boolean ValidarExpresion(string expresion)
-        {
-            List<char> Validos = new List<char>() { '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '+', '-', '/', '*', '^', ' ' };
-            foreach(char a in expresion.ToCharArray())
-            {
-                
-                if (Validos.IndexOf(a) == -1)
-                {
-                    
-                    return false;
-                    
-
-                }
-                
-            }
-            return true;
-        }
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            //tamaniolienzo(300, 300);
-            //colorlienzo("celeste");
-            //avanzar(50);
-            //centrar();
-            //subirPincel();
-            //avanzar(50);
-            //girarDer(20);
-            //avanzar(50);
-            //girarIzq(100);
-            //bajarPincel();
-            //avanzar(50);
-            //Console.WriteLine("hola como estas");
-            retroceder(20);
-            //string pf = e.ConvertirInfija(exp);
-
-            //ejecutar();
-
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
+    
 
         private void escribirEnConsola(string  texto)
         {
@@ -3131,21 +2372,7 @@ namespace Proyecto1
             consola.ReadOnly = true;
         }
 
-        private void consola_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void menuStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
-
-        private void label1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
+       
         private void runToolStripMenuItem_Click(object sender, EventArgs e)
         {
             escribirEnConsola("Analizando los lexemas...");
@@ -3157,15 +2384,20 @@ namespace Proyecto1
             tablaDeErrores.Clear();
             tablaDeFuncioes.Clear();
             tablaDeGraficas.Clear();
+            galeria.TabPages.Clear();
+
+            
+            agregarVariable("x", "0", "Reservada");
+            agregarVariable("y", "0", "Reservada");
 
             num = 1;
             numError = 1;
-            anguloActual = Math.PI / 2;
+           
 
             string cadena = textoentrada1.Text + " ";
             analizarLenguaje(cadena);
 
-            ejecutar();
+         
         }
 
 
@@ -3209,7 +2441,7 @@ namespace Proyecto1
        
 
         string rutaArchivo = null;
-        public string guardarComo(string texto)
+        private string guardarComo(string texto)
         {
             SaveFileDialog saveFileDialog1;
             saveFileDialog1 = new SaveFileDialog();
@@ -3356,6 +2588,11 @@ namespace Proyecto1
                 saveFileDialog1 = null;
             }
             
+        }
+
+        private void galeria_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
 
         private void tablaDeSimbolosToolStripMenuItem_Click(object sender, EventArgs e)

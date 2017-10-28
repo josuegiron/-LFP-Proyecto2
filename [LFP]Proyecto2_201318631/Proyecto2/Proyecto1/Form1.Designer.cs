@@ -29,9 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            this.lienzo = new System.Windows.Forms.Panel();
-            this.tortuga = new System.Windows.Forms.Label();
             this.consola = new System.Windows.Forms.TextBox();
             this.lConsola = new System.Windows.Forms.Label();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -56,34 +53,11 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.textoentrada1 = new System.Windows.Forms.RichTextBox();
-            this.lienzo1 = new System.Windows.Forms.PictureBox();
-            this.lienzo.SuspendLayout();
+            this.galeria = new System.Windows.Forms.TabControl();
             this.contextMenuStrip1.SuspendLayout();
             this.contextMenuStrip2.SuspendLayout();
             this.menu.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lienzo1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // lienzo
-            // 
-            this.lienzo.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.lienzo.Controls.Add(this.tortuga);
-            this.lienzo.Location = new System.Drawing.Point(375, 50);
-            this.lienzo.MaximumSize = new System.Drawing.Size(600, 500);
-            this.lienzo.MinimumSize = new System.Drawing.Size(50, 50);
-            this.lienzo.Name = "lienzo";
-            this.lienzo.Size = new System.Drawing.Size(50, 50);
-            this.lienzo.TabIndex = 2;
-            // 
-            // tortuga
-            // 
-            this.tortuga.BackColor = System.Drawing.Color.Transparent;
-            this.tortuga.Image = ((System.Drawing.Image)(resources.GetObject("tortuga.Image")));
-            this.tortuga.Location = new System.Drawing.Point(0, 3);
-            this.tortuga.Margin = new System.Windows.Forms.Padding(0);
-            this.tortuga.Name = "tortuga";
-            this.tortuga.Size = new System.Drawing.Size(32, 32);
-            this.tortuga.TabIndex = 0;
             // 
             // consola
             // 
@@ -98,7 +72,6 @@
             this.consola.Size = new System.Drawing.Size(970, 268);
             this.consola.TabIndex = 0;
             this.consola.TabStop = false;
-            this.consola.TextChanged += new System.EventHandler(this.consola_TextChanged);
             // 
             // lConsola
             // 
@@ -108,7 +81,6 @@
             this.lConsola.Size = new System.Drawing.Size(48, 13);
             this.lConsola.TabIndex = 5;
             this.lConsola.Text = "Consola:";
-            this.lConsola.Click += new System.EventHandler(this.label1_Click);
             // 
             // contextMenuStrip1
             // 
@@ -156,7 +128,6 @@
             this.menu.Size = new System.Drawing.Size(980, 24);
             this.menu.TabIndex = 8;
             this.menu.Text = "menuStrip1";
-            this.menu.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.menuStrip1_ItemClicked);
             // 
             // archivoToolStripMenuItem2
             // 
@@ -200,8 +171,8 @@
             // runToolStripMenuItem
             // 
             this.runToolStripMenuItem.Name = "runToolStripMenuItem";
-            this.runToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
-            this.runToolStripMenuItem.Text = "Run";
+            this.runToolStripMenuItem.Size = new System.Drawing.Size(145, 20);
+            this.runToolStripMenuItem.Text = "Análisis Léxico y Sintáctico";
             this.runToolStripMenuItem.Click += new System.EventHandler(this.runToolStripMenuItem_Click);
             // 
             // reportesToolStripMenuItem
@@ -263,10 +234,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(372, 34);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(78, 13);
+            this.label1.Size = new System.Drawing.Size(43, 13);
             this.label1.TabIndex = 9;
-            this.label1.Text = "Area de dibujo:";
-            this.label1.Click += new System.EventHandler(this.label1_Click_1);
+            this.label1.Text = "Galeria:";
             // 
             // label2
             // 
@@ -287,14 +257,14 @@
             this.textoentrada1.Text = "";
             this.textoentrada1.TextChanged += new System.EventHandler(this.textoentrada1_TextChanged);
             // 
-            // lienzo1
+            // galeria
             // 
-            this.lienzo1.BackColor = System.Drawing.Color.White;
-            this.lienzo1.Location = new System.Drawing.Point(378, 106);
-            this.lienzo1.Name = "lienzo1";
-            this.lienzo1.Size = new System.Drawing.Size(590, 444);
-            this.lienzo1.TabIndex = 12;
-            this.lienzo1.TabStop = false;
+            this.galeria.Location = new System.Drawing.Point(375, 50);
+            this.galeria.Name = "galeria";
+            this.galeria.SelectedIndex = 0;
+            this.galeria.Size = new System.Drawing.Size(600, 500);
+            this.galeria.TabIndex = 12;
+            this.galeria.SelectedIndexChanged += new System.EventHandler(this.galeria_SelectedIndexChanged);
             // 
             // Form1
             // 
@@ -302,33 +272,28 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.ClientSize = new System.Drawing.Size(980, 858);
-            this.Controls.Add(this.lienzo1);
+            this.Controls.Add(this.galeria);
             this.Controls.Add(this.textoentrada1);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.menu);
             this.Controls.Add(this.lConsola);
             this.Controls.Add(this.consola);
-            this.Controls.Add(this.lienzo);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MainMenuStrip = this.menu;
             this.Name = "Form1";
             this.Text = "KTurtle";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.lienzo.ResumeLayout(false);
             this.contextMenuStrip1.ResumeLayout(false);
             this.contextMenuStrip2.ResumeLayout(false);
             this.menu.ResumeLayout(false);
             this.menu.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.lienzo1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.Panel lienzo;
-        private System.Windows.Forms.Label tortuga;
         private System.Windows.Forms.TextBox consola;
         private System.Windows.Forms.Label lConsola;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
@@ -353,7 +318,7 @@
         private System.Windows.Forms.ToolStripMenuItem manualDeUsuarioToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem manualTécnicoToolStripMenuItem;
         private System.Windows.Forms.RichTextBox textoentrada1;
-        private System.Windows.Forms.PictureBox lienzo1;
+        private System.Windows.Forms.TabControl galeria;
     }
 }
 
